@@ -10,39 +10,6 @@ import SwiftUI
 
 let inDev: Bool = false
 
-@available(iOS 15.0, *)
-#Preview {
-    VStack {
-        HStack {
-            Text("hello World!")
-            
-            Image(systemName: "globe.americas")
-            
-            Spacer()
-        }
-        .rectangularBackground(style: .transparent, shadow: true)
-        .padding(.bottom)
-        
-        HStack {
-            Text("manual RectangularBackground")
-            
-            Image(systemName: "globe.europe.africa")
-        }
-        .padding()
-        .background(
-            Colors.secondaryLight
-                .cornerRadius(50, corners: [ .topRight, .bottomLeft ])
-                
-        )
-        
-        Spacer()
-    }
-    .padding()
-    .universalTextStyle(reversed: false)
-    .universalImageBackground( universalImage("test") )
-    
-}
-
 public enum UniversalStyle: String, Identifiable {
     case primary
     case secondary

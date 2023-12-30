@@ -100,8 +100,6 @@ public enum ProvidedFont: String, CaseIterable, Identifiable {
             fatalError("Couldn't create font from filename: \(fontName) with extension \(fontExtension)")
         }
         
-        print("no error")
-        
         var error: Unmanaged<CFError>?
         
         CTFontManagerRegisterGraphicsFont(font, &error)

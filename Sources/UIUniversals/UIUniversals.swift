@@ -7,7 +7,7 @@ import SwiftUI
 @available(iOS 15.0, *)
 public struct TestView: View {
 
-    public init() { 
+    public init() {
         ProvidedFont.registerFonts()
     }
     
@@ -20,6 +20,14 @@ public struct TestView: View {
         }
         .foregroundStyle(Colors.lightAccent)
     }
+}
+
+@available(iOS 15.0, *)
+func universalImage(_ name: String) -> Image {
+    if let UIImage = UIImage(named: name, in: .module, with: nil) {
+        return Image(uiImage: UIImage )
+    }
+    return Image( "papernoise" )
 }
 
 

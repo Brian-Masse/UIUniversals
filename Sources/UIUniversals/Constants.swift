@@ -11,10 +11,48 @@ import SwiftUI
 //MARK: Colors
 @available(iOS 13.0, *)
 public class Colors {
-//    static var tint: Color { PlanterModel.shared.activeColor }
+    public static var tint: Color { Colors.main }
     public static var main: Color { lightAccent }
     
     public static var colorOptions: [Color] = [ lightAccent, blue, purple, grape, pink, red, yellow,  ]
+    
+    public static func getAccent(from colorScheme: ColorScheme) -> Color {
+        switch colorScheme {
+        case .light: return Colors.lightAccent
+        case .dark: return Colors.darkAccent
+        @unknown default:
+            return Colors.lightAccent
+        }
+    }
+    
+    public static func getBase(from colorScheme: ColorScheme) -> Color {
+        switch colorScheme {
+        case .light: return Colors.baseLight
+        case .dark: return Colors.baseDark
+        @unknown default:
+            return Colors.baseDark
+        }
+    }
+    
+    public static func getSecondaryBase(from colorScheme: ColorScheme) -> Color {
+        switch colorScheme {
+        case .light: return Colors.secondaryLight
+        case .dark: return Colors.secondaryDark
+        @unknown default:
+            return Colors.secondaryDark
+        }
+    }
+    
+    public static func getColor(from style: UniversalStyle, in colorScheme: ColorScheme) -> Color {
+        switch style {
+        case .primary: return getBase(from: colorScheme)
+        case .secondary: return getSecondaryBase(from: colorScheme)
+        case .accent: return getAccent(from: colorScheme)
+        default: return Colors.lightAccent
+        }
+        
+        
+    }
     
     public static var baseLight = makeColor( 245, 234, 208 )
     public static var secondaryLight = makeColor(220, 207, 188)
@@ -22,7 +60,7 @@ public class Colors {
     public static var secondaryDark = Color(red: 0.1, green: 0.1, blue: 0.1).opacity(0.9)
     
     public static var lightAccent = makeColor(245, 87, 66)
-    public static var darkAccent = makeColor( 245, 87, 66)
+    public static var darkAccent = makeColor( 0, 87, 66)
     
     public static let yellow = makeColor(234, 169, 40)
     public static let pink = makeColor(198, 62, 120)
@@ -152,8 +190,8 @@ class Constants {
     static let yearTime: Double = 31557600
     
     //    fonts
-//    static let titleFont: ProvidedFont = .madeTommyRegular
-//    static let mainFont: ProvidedFont = .madeTommyRegular
+    static let titleFont: ProvidedFont = .madeTommyRegular
+    static let mainFont: ProvidedFont = .madeTommyRegular
     
     
     //    if there are any variables that need to be computed at the start, run their setup code here

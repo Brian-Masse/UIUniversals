@@ -4,7 +4,7 @@
 import Foundation
 import SwiftUI
 
-@available(iOS 13.0, *)
+@available(iOS 15.0, *)
 public struct TestView: View {
 
     public init() {  }
@@ -15,11 +15,12 @@ public struct TestView: View {
             
             Image(systemName: "globe.europe.africa")
         }
+        .foregroundStyle(Colors.lightAccent)
     }
 }
 
 
-@available(iOS 13.0, *)
+@available(iOS 15.0, *)
 #Preview {
     TestView()
 }

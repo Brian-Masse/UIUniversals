@@ -6,6 +6,8 @@ import SwiftUI
 
 @available(iOS 13.0, *)
 public struct TestView: View {
+
+    public init() {  }
     
     public var body: some View {
         HStack {
@@ -14,4 +16,10 @@ public struct TestView: View {
             Image(systemName: "globe.europe.africa")
         }
     }
+}
+
+
+@available(iOS 13.0, *)
+#Preview {
+    TestView()
 }

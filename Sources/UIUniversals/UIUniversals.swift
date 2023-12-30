@@ -23,7 +23,7 @@ public struct TestView: View {
 }
 
 @available(iOS 15.0, *)
-func universalImage(_ name: String) -> Image {
+public func universalImage(_ name: String) -> Image {
     if let UIImage = UIImage(named: name, in: .module, with: nil) {
         return Image(uiImage: UIImage )
     }

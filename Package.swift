@@ -19,8 +19,7 @@ let package = Package(
             dependencies: [],
             path: "Sources",
             resources: [
-                .process("Resources/Fonts")
-            
+                .process("Resources"),
             ]
         ),
         .testTarget(

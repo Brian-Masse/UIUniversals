@@ -229,7 +229,7 @@ public struct WrappedHStack<Content: View, Object: Identifiable>: View where Obj
     let content: ( Object ) -> Content
     let spacing: CGFloat
 
-    init( collection: [Object], spacing: CGFloat = 10,  @ViewBuilder content: @escaping (Object) -> Content ) {
+    public  init( collection: [Object], spacing: CGFloat = 10,  @ViewBuilder content: @escaping (Object) -> Content ) {
         self.collection = collection
         self.spacing = spacing
         self.content = content

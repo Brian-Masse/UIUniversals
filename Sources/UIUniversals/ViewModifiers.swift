@@ -222,7 +222,7 @@ private struct RectangularBackground: ViewModifier {
 }
 
 @available(iOS 15.0, *)
-extension View {
+public extension View {
     func rectangularBackground(_ padding: CGFloat? = nil,
                                      style: UniversalStyle = .primary,
                                      stroke: Bool = false,

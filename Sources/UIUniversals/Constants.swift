@@ -160,38 +160,38 @@ public enum ProvidedFont: String, CaseIterable, Identifiable {
 }
 
 //MARK: Constants
-class Constants {
+public class Constants {
     
     //    font sizes
-    static let UILargeTextSize: CGFloat     = 130
-    static let UITitleTextSize: CGFloat     = 80
-    static let UIMainHeaderTextSize: CGFloat    = 60
-    static let UIHeaderTextSize: CGFloat    = 40
-    static let UISubHeaderTextSize: CGFloat = 30
-    static let UIDefaultTextSize: CGFloat   = 20
-    static let UISmallTextSize: CGFloat     = 15
+    public static let UILargeTextSize: CGFloat     = 130
+    public static let UITitleTextSize: CGFloat     = 80
+    public static let UIMainHeaderTextSize: CGFloat    = 60
+    public static let UIHeaderTextSize: CGFloat    = 40
+    public static let UISubHeaderTextSize: CGFloat = 30
+    public static let UIDefaultTextSize: CGFloat   = 20
+    public static let UISmallTextSize: CGFloat     = 15
     
     //    extra
-    static let UIDefaultCornerRadius: CGFloat = 40
-    static let UILargeCornerRadius: CGFloat = 55
-    static let UIBottomOfPagePadding: CGFloat = 130
+    public static let UIDefaultCornerRadius: CGFloat = 40
+    public static let UILargeCornerRadius: CGFloat = 55
+    public static let UIBottomOfPagePadding: CGFloat = 130
     
     //    forms
-    static let UIFormSpacing      : CGFloat = 10
-    static let UIFormPagePadding: CGFloat = 5
-    static let UIFormSliderTextFieldWidth: CGFloat = 60
+    public static let UIFormSpacing      : CGFloat = 10
+    public static let UIFormPagePadding: CGFloat = 5
+    public static let UIFormSliderTextFieldWidth: CGFloat = 60
     
     
     //    timings
-    static let MinuteTime: Double = 60
-    static let HourTime: Double = 3600
-    static let DayTime: Double = 86400
-    static let WeekTime: Double = 604800
-    static let yearTime: Double = 31557600
+    public static let MinuteTime: Double = 60
+    public static let HourTime: Double = 3600
+    public static let DayTime: Double = 86400
+    public static let WeekTime: Double = 604800
+    public static let yearTime: Double = 31557600
     
     //    fonts
-    static let titleFont: ProvidedFont = .madeTommyRegular
-    static let mainFont: ProvidedFont = .madeTommyRegular
+    public static let titleFont: ProvidedFont = .madeTommyRegular
+    public static let mainFont: ProvidedFont = .madeTommyRegular
     
     
     //    if there are any variables that need to be computed at the start, run their setup code here

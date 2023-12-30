@@ -7,11 +7,15 @@ import SwiftUI
 @available(iOS 15.0, *)
 public struct TestView: View {
 
-    public init() {  }
+    public init() { 
+        print("this is runnign here")
+        ProvidedFont.registerFonts()
+    }
     
     public var body: some View {
         HStack {
             Text("hello world!")
+//                .font(.custom( ProvidedFont.renoMono.rawValue, size: 50))
             
             Image(systemName: "globe.europe.africa")
         }

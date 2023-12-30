@@ -17,7 +17,11 @@ let package = Package(
         .target(
             name: "UIUniversals",
             dependencies: [],
-            path: "Sources"
+            path: "Sources",
+            resources: [
+                .process("Resources/Fonts")
+            
+            ]
         ),
         .testTarget(
             name: "UIUniversalsTests",

@@ -471,3 +471,43 @@ extension String: Identifiable {
         self
     }
 }
+
+//MARK: Vertical Layout
+@available(iOS 16.0, *)
+struct VerticalLayout: Layout {
+    public init() {}
+    
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        let size = subviews.first!.sizeThatFits(.unspecified)
+        return .init(width: size.height, height: size.width)
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        subviews.first!.place(at: .init(x: bounds.midX, y: bounds.midY), anchor: .center, proposal: .unspecified)
+    }
+}
+
+@available(iOS 16.0, *)
+struct RotatedLayout: Layout {
+    //    radians
+    let angle: Double
+    let scale: Double
+    
+    public init( at angle: Double, scale: Double = 1 ) {
+        self.angle = abs(angle)
+        self.scale = scale
+    }
+    
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        let size = subviews.first!.sizeThatFits(.unspecified)
+        let width = size.width * cos(Double(angle)) + size.height * sin(Double(angle))
+        let height = size.height * cos(Double(angle)) + size.width * sin(Double(angle))
+        
+        return .init(width: width * scale,
+                     height: height * scale)
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        subviews.first!.place(at: .init(x: bounds.midX, y: bounds.midY), anchor: .center, proposal: .unspecified)
+    }
+}

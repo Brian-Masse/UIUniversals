@@ -30,6 +30,7 @@ private struct UniversalButton<C: View>: View {
     
     let label: C
     let action: () -> Void
+    let animate: Bool
     
     private struct OpacityButtonStyle: ButtonStyle {
         func makeBody(configuration: Configuration) -> some View {
@@ -39,16 +40,26 @@ private struct UniversalButton<C: View>: View {
         }
     }
     
-    init( labelBuilder: () -> C, action: @escaping () -> Void ) {
+    private struct NoTapAnimationStyle: PrimitiveButtonStyle {
+        func makeBody(configuration: Configuration) -> some View {
+            configuration.label
+                .contentShape(Rectangle())
+                .onTapGesture(perform: configuration.trigger)
+        }
+    }
+    
+    init( shouldAnimate: Bool = true, labelBuilder: () -> C, action: @escaping () -> Void) {
         self.label = labelBuilder()
         self.action = action
+        self.animate = shouldAnimate
     }
     
     var body: some View {
         Button { withAnimation {
             action()
         } } label: { label }
-        .buttonStyle( OpacityButtonStyle() )
+            .if( animate ) { view in view.buttonStyle( OpacityButtonStyle() ) }
+            .if( !animate ) { view in view.buttonStyle( NoTapAnimationStyle() ) }
     }
 }
 
@@ -261,7 +272,7 @@ public struct LargeRoundedButton: View {
         let label: String = (self.completed() || tempCompletion ) ? completedLabel : label
         let completedIcon: String = (self.completed() || tempCompletion ) ? completedIcon : icon
         
-        UniversalButton {
+        UniversalButton(shouldAnimate: self.completedLabel.isEmpty && self.completedIcon.isEmpty) {
             HStack {
                 if wide { Spacer() }
                 if label != "" {

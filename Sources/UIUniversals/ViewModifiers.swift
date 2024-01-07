@@ -169,8 +169,7 @@ private struct RectangularBackground: ViewModifier {
                     }
                 }
             )
-            .if(style == .transparent) { view in view.background( .ultraThinMaterial ) }
-            .if(style != .transparent) { view in view.background( Colors.getColor(from: style, in: colorScheme) ) }
+            .universalStyledBackgrond(style)
             .if(stroke) { view in
                 view
                     .overlay(
@@ -345,6 +344,27 @@ private struct UniversalBackgroundColor: ViewModifier {
 }
 
 @available(iOS 15.0, *)
+private struct UniversalStyledBackground: ViewModifier {
+    @Environment(\.colorScheme) var colorScheme
+    
+    let style: UniversalStyle
+    let color: Color?
+    let foregrond: Bool
+    
+    func body(content: Content) -> some View {
+        if !foregrond {
+            content
+                .if( style == .transparent ) { view in view.background( .ultraThinMaterial ) }
+                .if( style != .transparent ) { view in view.background( color ?? Colors.getColor(from: style, in: colorScheme) ) }
+        } else {
+            content
+                .if( style == .transparent ) { view in view.foregroundStyle( .ultraThinMaterial ) }
+                .if( style != .transparent ) { view in view.foregroundStyle( color ?? Colors.getColor(from: style, in: colorScheme) ) }
+        }
+    }
+}
+
+@available(iOS 15.0, *)
 extension View {
     func universalforegroundStyle() -> some View {
         modifier( UniversalforegroundStyle() )
@@ -352,5 +372,9 @@ extension View {
     
     func universalBackgroundColor(ignoreSafeAreas: Edge.Set? = nil) -> some View {
         modifier( UniversalBackgroundColor(ignoreSafeAreas: ignoreSafeAreas) )
+    }
+    
+    func universalStyledBackgrond( _ style: UniversalStyle, color: Color? = nil, onForeground: Bool = false ) -> some View {
+        modifier( UniversalStyledBackground(style: style, color: color, foregrond: onForeground) )
     }
 }

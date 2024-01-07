@@ -50,8 +50,6 @@ public class Colors {
         case .accent: return getAccent(from: colorScheme)
         default: return Colors.lightAccent
         }
-        
-        
     }
     
     public static var baseLight = makeColor( 245, 234, 208 )
@@ -59,7 +57,7 @@ public class Colors {
     public static var baseDark = makeColor( 0,0,0 )
     public static var secondaryDark = Color(red: 0.1, green: 0.1, blue: 0.1).opacity(0.9)
     
-    public static var lightAccent = makeColor(245, 87, 66)
+    public static var lightAccent = makeColor( 0, 87, 66)
     public static var darkAccent = makeColor( 0, 87, 66)
     
     public static let yellow = makeColor(234, 169, 40)

@@ -15,12 +15,12 @@ import SwiftUI
                         at: 45,
                         aspectRatio: 1.5,
                         verticalTextAlignment: .bottom,
-                        arrowDirection: .up,
-                        style: .green) {
+                        arrowDirection: .up) {
+            
             print("hi!")
         }
         
-        LargeRoundedButton( "hello", icon: "arrow.forward" ) { }
+        LargeRoundedButton( "hello", icon: "arrow.forward", style: .transparent ) { }
     }
 }
 
@@ -55,7 +55,7 @@ private struct UniversalButton<C: View>: View {
 
 //MARK: LargeTextButton
 @available(iOS 16.0, *)
-public struct LargeTextButton<T: ShapeStyle>: View {
+public struct LargeTextButton: View {
     
     public enum ArrowDirection: Int {
         case up = 1
@@ -79,21 +79,23 @@ public struct LargeTextButton<T: ShapeStyle>: View {
     let arrowWidth: CGFloat
     let arrow: Bool
     
-    let style: T
+    let style: UniversalStyle
+    let color: Color?
     let width: CGFloat
     
     let action: () -> Void
     
     public init( _ text: String,
-          at angle: Double,
-          aspectRatio: Double = 2,
-          verticalTextAlignment: Alignment = .bottom,
-          arrow: Bool = true,
-          arrowDirection: ArrowDirection = .down,
-          arrowWidth: CGFloat = 4,
-          style: T = Color.red,
-          width: CGFloat = 100,
-          action: @escaping () -> Void
+                 at angle: Double,
+                 aspectRatio: Double = 2,
+                 verticalTextAlignment: Alignment = .bottom,
+                 arrow: Bool = true,
+                 arrowDirection: ArrowDirection = .down,
+                 arrowWidth: CGFloat = 4,
+                 style: UniversalStyle = .accent,
+                 color: Color? = nil,
+                 width: CGFloat = 100,
+                 action: @escaping () -> Void
     ) {
         
         self.text = text
@@ -106,6 +108,7 @@ public struct LargeTextButton<T: ShapeStyle>: View {
         self.arrowDirection = arrowDirection
         
         self.style = style
+        self.color = color
         self.width = width
         
         self.action = action
@@ -119,7 +122,7 @@ public struct LargeTextButton<T: ShapeStyle>: View {
             .aspectRatio(1 / aspectRatio, contentMode: contentMode)
             .frame(width: width)
             .cornerRadius(Constants.UIDefaultCornerRadius)
-            .foregroundStyle( self.style )
+            .universalStyledBackgrond(style, color: color, onForeground: true)
     }
     
     @ViewBuilder
@@ -210,6 +213,7 @@ public struct LargeTextButton<T: ShapeStyle>: View {
                         .mask(alignment: verticalTextAlignment ) { makeShape(.fill) }
                     }
                 }
+                .foregroundStyle(.black)
                 .frame(width: width, height: width * aspectRatio)
             }
         } action: { action() }
@@ -217,9 +221,11 @@ public struct LargeTextButton<T: ShapeStyle>: View {
     }
 }
 
-//MARKK: LargeRoundedButton
+//MARK: LargeRoundedButton
 @available(iOS 16.0, *)
 public struct LargeRoundedButton: View {
+    
+    @Environment(\.colorScheme) var colorScheme
     
     let label: String
     let completedLabel: String
@@ -231,11 +237,13 @@ public struct LargeRoundedButton: View {
     
     let small: Bool
     let wide: Bool
+    
     let color: Color?
+    let style: UniversalStyle
     
     @State var tempCompletion: Bool = false
     
-    public init( _ label: String, to completedLabel: String = "", icon: String, to completedIcon: String = "", wide: Bool = false, small: Bool = false, color: Color? = nil, completed: @escaping () -> Bool = {false}, action: @escaping () -> Void ) {
+    public init( _ label: String, to completedLabel: String = "", icon: String, to completedIcon: String = "", wide: Bool = false, small: Bool = false, color: Color? = nil, style: UniversalStyle = .accent, completed: @escaping () -> Bool = {false}, action: @escaping () -> Void ) {
         self.label = label
         self.completedLabel = completedLabel
         self.icon = icon
@@ -245,6 +253,8 @@ public struct LargeRoundedButton: View {
         self.wide = wide
         self.small = small
         self.color = color
+        self.style = style
+        
     }
     
     public var body: some View {
@@ -268,8 +278,7 @@ public struct LargeRoundedButton: View {
             .padding(.vertical, small ? 7: 25 )
             .padding(.horizontal, small ? 25 : 25)
             .foregroundColor(.black)
-            .if( color == nil ) { view in view.universalBackgroundColor() }
-            .if( color != nil ) { view in view.background(color) }
+            .universalStyledBackgrond(style, color: color)
             .cornerRadius(Constants.UIDefaultCornerRadius)
             .animation(.default, value: completed() )
             

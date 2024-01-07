@@ -20,8 +20,35 @@ import SwiftUI
             print("hi!")
         }
         
-        
         LargeRoundedButton( "hello", icon: "arrow.forward" ) { }
+    }
+}
+
+//MARK: UniversalButton
+@available(iOS 16.0, *)
+private struct UniversalButton<C: View>: View {
+    
+    let label: C
+    let action: () -> Void
+    
+    private struct OpacityButtonStyle: ButtonStyle {
+        func makeBody(configuration: Configuration) -> some View {
+            configuration.label
+                .opacity( configuration.isPressed ? 0.6 : 1 )
+            
+        }
+    }
+    
+    init( labelBuilder: () -> C, action: @escaping () -> Void ) {
+        self.label = labelBuilder()
+        self.action = action
+    }
+    
+    var body: some View {
+        Button { withAnimation {
+            action()
+        } } label: { label }
+        .buttonStyle( OpacityButtonStyle() )
     }
 }
 
@@ -149,44 +176,44 @@ public struct LargeTextButton<T: ShapeStyle>: View {
         
         let transformedText = transformText()
         
-        RotatedLayout(at: degreeToRad(), scale: 0.9) {
-            ZStack(alignment: verticalTextAlignment) {
-                
-                makeShape(.fit)
-                    .overlay() { if arrow {
-                        GeometryReader { geo in
-                            ZStack(alignment: invertVerticalTextAlignment() ) {
-                                Rectangle()
-                                    .foregroundStyle(.clear)
-//
-                                makeArrow()
-                                    .if(verticalTextAlignment == .top) { view in view.padding(.bottom, 20 ) }
-                                    .if(verticalTextAlignment != .top) { view in view.padding(.vertical, 20 ) }
-                                    .frame(height: !text.isEmpty ? geo.size.height / 2 : geo.size.height - 20)
+        UniversalButton {
+            RotatedLayout(at: degreeToRad(), scale: 0.9) {
+                ZStack(alignment: verticalTextAlignment) {
+                    makeShape(.fit)
+                        .overlay() { if arrow {
+                            GeometryReader { geo in
+                                ZStack(alignment: invertVerticalTextAlignment() ) {
+                                    Rectangle()
+                                        .foregroundStyle(.clear)
+                                    //
+                                    makeArrow()
+                                        .if(verticalTextAlignment == .top) { view in view.padding(.bottom, 20 ) }
+                                        .if(verticalTextAlignment != .top) { view in view.padding(.vertical, 20 ) }
+                                        .frame(height: !text.isEmpty ? geo.size.height / 2 : geo.size.height - 20)
+                                }
                             }
+                        }}
+                    if !text.isEmpty {
+                        RotatedLayout(at: 0, scale: 0.7) {
+                            UniversalText(transformedText,
+                                          size: Constants.UIHeaderTextSize + 10,
+                                          font: Constants.mainFont,
+                                          case: .uppercase,
+                                          scale: true,
+                                          textAlignment: .center,
+                                          lineSpacing: -25)
+                            .scaleEffect(CGSize(width: 0.7, height: 0.7))
+                            .rotationEffect(.degrees(-angle))
+                            .allowsHitTesting(false)
                         }
-                    }}
-                if !text.isEmpty {
-                    RotatedLayout(at: 0, scale: 0.7) {
-                        UniversalText(transformedText,
-                                      size: Constants.UIHeaderTextSize + 10,
-                                      font: Constants.mainFont,
-                                      case: .uppercase,
-                                      scale: true,
-                                      textAlignment: .center,
-                                      lineSpacing: -25)
-                        .scaleEffect(CGSize(width: 0.7, height: 0.7))
-                        .rotationEffect(.degrees(-angle))
-                        .allowsHitTesting(false)
+                        .padding(.vertical)
+                        .mask(alignment: verticalTextAlignment ) { makeShape(.fill) }
                     }
-                    .padding(.vertical)
-                    .mask(alignment: verticalTextAlignment ) { makeShape(.fill) }
                 }
+                .frame(width: width, height: width * aspectRatio)
             }
-            .frame(width: width, height: width * aspectRatio)
-            .onTapGesture { withAnimation { action() } }
+        } action: { action() }
             .rotationEffect(.degrees(angle))
-        }
     }
 }
 
@@ -224,26 +251,28 @@ public struct LargeRoundedButton: View {
         let label: String = (self.completed() || tempCompletion ) ? completedLabel : label
         let completedIcon: String = (self.completed() || tempCompletion ) ? completedIcon : icon
         
-        HStack {
-            if wide { Spacer() }
-            if label != "" {
-                UniversalText(label, size: Constants.UISubHeaderTextSize, font: .syneHeavy)
-                    .minimumScaleFactor(0.7)
-                    .lineLimit(1)
+        UniversalButton {
+            HStack {
+                if wide { Spacer() }
+                if label != "" {
+                    UniversalText(label, size: Constants.UISubHeaderTextSize, font: .syneHeavy)
+                        .minimumScaleFactor(0.7)
+                        .lineLimit(1)
+                }
+                
+                if completedIcon != "" {
+                    Image(systemName: completedIcon)
+                }
+                if wide { Spacer() }
             }
+            .padding(.vertical, small ? 7: 25 )
+            .padding(.horizontal, small ? 25 : 25)
+            .foregroundColor(.black)
+            .if( color == nil ) { view in view.universalBackgroundColor() }
+            .if( color != nil ) { view in view.background(color) }
+            .cornerRadius(Constants.UIDefaultCornerRadius)
+            .animation(.default, value: completed() )
             
-            if completedIcon != "" {
-                Image(systemName: completedIcon)
-            }
-            if wide { Spacer() }
-        }
-        .padding(.vertical, small ? 7: 25 )
-        .padding(.horizontal, small ? 25 : 25)
-        .foregroundColor(.black)
-        .if( color == nil ) { view in view.universalBackgroundColor() }
-        .if( color != nil ) { view in view.background(color) }
-        .cornerRadius(Constants.UIDefaultCornerRadius)
-        .animation(.default, value: completed() )
-        .onTapGesture { action() }
+        } action: { withAnimation { action() } }
     }
 }

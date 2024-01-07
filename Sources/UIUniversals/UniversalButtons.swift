@@ -10,16 +10,23 @@ import SwiftUI
 
 @available(iOS 16.0, *)
 #Preview {
-    LargeTextButton("hel lo",
-                    at: 45,
-                    aspectRatio: 1.5,
-                    verticalTextAlignment: .bottom,
-                    arrowDirection: .up,
-                    style: .green) {
-        print("hi!")
+    VStack {
+        LargeTextButton("hel lo",
+                        at: 45,
+                        aspectRatio: 1.5,
+                        verticalTextAlignment: .bottom,
+                        arrowDirection: .up,
+                        style: .green) {
+            print("hi!")
+        }
+        
+        
+        LargeRoundedButton( "hello", icon: "arrow.forward" ) { }
     }
 }
 
+
+//MARK: LargeTextButton
 @available(iOS 16.0, *)
 public struct LargeTextButton<T: ShapeStyle>: View {
     
@@ -180,5 +187,63 @@ public struct LargeTextButton<T: ShapeStyle>: View {
             .onTapGesture { withAnimation { action() } }
             .rotationEffect(.degrees(angle))
         }
+    }
+}
+
+//MARKK: LargeRoundedButton
+@available(iOS 16.0, *)
+public struct LargeRoundedButton: View {
+    
+    let label: String
+    let completedLabel: String
+    let icon: String
+    let completedIcon: String
+    
+    let completed: () -> Bool
+    let action: () -> Void
+    
+    let small: Bool
+    let wide: Bool
+    let color: Color?
+    
+    @State var tempCompletion: Bool = false
+    
+    public init( _ label: String, to completedLabel: String = "", icon: String, to completedIcon: String = "", wide: Bool = false, small: Bool = false, color: Color? = nil, completed: @escaping () -> Bool = {false}, action: @escaping () -> Void ) {
+        self.label = label
+        self.completedLabel = completedLabel
+        self.icon = icon
+        self.completedIcon = completedIcon
+        self.completed = completed
+        self.action = action
+        self.wide = wide
+        self.small = small
+        self.color = color
+    }
+    
+    public var body: some View {
+        let label: String = (self.completed() || tempCompletion ) ? completedLabel : label
+        let completedIcon: String = (self.completed() || tempCompletion ) ? completedIcon : icon
+        
+        HStack {
+            if wide { Spacer() }
+            if label != "" {
+                UniversalText(label, size: Constants.UISubHeaderTextSize, font: .syneHeavy)
+                    .minimumScaleFactor(0.7)
+                    .lineLimit(1)
+            }
+            
+            if completedIcon != "" {
+                Image(systemName: completedIcon)
+            }
+            if wide { Spacer() }
+        }
+        .padding(.vertical, small ? 7: 25 )
+        .padding(.horizontal, small ? 25 : 25)
+        .foregroundColor(.black)
+        .if( color == nil ) { view in view.universalBackgroundColor() }
+        .if( color != nil ) { view in view.background(color) }
+        .cornerRadius(Constants.UIDefaultCornerRadius)
+        .animation(.default, value: completed() )
+        .onTapGesture { action() }
     }
 }

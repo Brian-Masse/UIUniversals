@@ -493,7 +493,7 @@ struct VerticalLayout: Layout {
 }
 
 @available(iOS 16.0, *)
-struct RotatedLayout: Layout {
+public struct RotatedLayout: Layout {
     //    radians
     let angle: Double
     let scale: Double
@@ -503,7 +503,7 @@ struct RotatedLayout: Layout {
         self.scale = scale
     }
     
-    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+    public func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
         let size = subviews.first!.sizeThatFits(.unspecified)
         let width = size.width * cos(Double(angle)) + size.height * sin(Double(angle))
         let height = size.height * cos(Double(angle)) + size.width * sin(Double(angle))
@@ -512,7 +512,7 @@ struct RotatedLayout: Layout {
                      height: height * scale)
     }
 
-    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+    public func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
         subviews.first!.place(at: .init(x: bounds.midX, y: bounds.midY), anchor: .center, proposal: .unspecified)
     }
 }

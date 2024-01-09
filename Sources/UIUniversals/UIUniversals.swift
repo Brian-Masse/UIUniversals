@@ -96,7 +96,7 @@ public struct UniversalText: View {
     let text: String
     let size: CGFloat
     let font: String
-    let textCase: Text.Case
+    let textCase: Text.Case?
     
     let wrap: Bool
     let fixed: Bool
@@ -107,15 +107,15 @@ public struct UniversalText: View {
     let compensateForEmptySpace: Bool
     
     public init(_ text: String,
-         size: CGFloat,
-         font: ProvidedFont = .madeTommyRegular,
-         case textCase: Text.Case = .lowercase,
-         wrap: Bool = true,
-         fixed: Bool = false,
-         scale: Bool = false,
-         textAlignment: TextAlignment = .leading,
-         lineSpacing: CGFloat = 0.5,
-         compensateForEmptySpace: Bool = true
+                size: CGFloat,
+                font: ProvidedFont = .madeTommyRegular,
+                case textCase: Text.Case? = nil,
+                wrap: Bool = true,
+                fixed: Bool = false,
+                scale: Bool = false,
+                textAlignment: TextAlignment = .leading,
+                lineSpacing: CGFloat = 0.5,
+                compensateForEmptySpace: Bool = true
     ) {
         self.text = text
         self.size = size
@@ -141,7 +141,7 @@ public struct UniversalText: View {
             .lineLimit(wrap ? 30 : 1)
             .multilineTextAlignment(alignment)
             .font( fixed ? Font.custom(font, fixedSize: size) : Font.custom(font, size: size) )
-            .textCase(textCase)
+            .if( textCase != nil ) { view in view.textCase(textCase) }
         
     }
     

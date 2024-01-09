@@ -9,19 +9,32 @@ import Foundation
 import SwiftUI
 
 @available(iOS 16.0, *)
-#Preview {
-    VStack {
-        LargeTextButton("hel lo",
-                        at: 45,
-                        aspectRatio: 1.5,
-                        verticalTextAlignment: .bottom,
-                        arrowDirection: .up) {
+struct TestingView: View {
+    
+    @State var toggle: Bool = false
+    
+    var body: some View {
+        VStack {
+            LargeTextButton("hel lo",
+                            at: 45,
+                            aspectRatio: 1.5,
+                            verticalTextAlignment: .bottom,
+                            arrowDirection: .up) {
+                
+                print("hi!")
+            }
             
-            print("hi!")
+            LargeRoundedButton( "hello", icon: "arrow.forward", style: .transparent ) { }
+            
+            UnderlinedButton("test", toggle: $toggle)
         }
         
-        LargeRoundedButton( "hello", icon: "arrow.forward", style: .transparent ) { }
     }
+}
+
+@available(iOS 16.0, *)
+#Preview {
+    TestingView()
 }
 
 //MARK: UniversalButton
@@ -294,5 +307,71 @@ public struct LargeRoundedButton: View {
             .animation(.default, value: completed() )
             
         } action: { withAnimation { action() } }
+    }
+}
+
+//MARK: UnderlinedButton
+@available(iOS 16.0, *)
+public struct UnderlinedButton: View {
+    
+    @Environment(\.colorScheme) var colorScheme
+    
+    let title: String
+    let icon: String
+    
+    @Binding var toggle: Bool
+    
+    public init( _ title: String, icon: String = "", toggle: Binding<Bool>) {
+        self.title = title
+        self.icon = icon
+        self._toggle = toggle
+    }
+    
+    public var body: some View {
+        
+        UniversalButton(shouldAnimate: false) {
+            VStack(spacing: 0) {
+                HStack {
+                    UniversalText( title,
+                                   size: Constants.UISubHeaderTextSize,
+                                   font: Constants.mainFont,
+                                   case: .uppercase,
+                                   wrap: false)
+                    
+                    if !icon.isEmpty { Image(systemName: icon) }
+                }
+                
+                Divider(strokeWidth: 3)
+            }
+            
+            .universalStyledBackgrond( toggle ? .accent : .secondary, onForeground: true)
+            .padding(.horizontal)
+            
+        } action: { toggle.toggle()}
+    }
+    
+}
+
+//MARK: ContextMenuButton
+@available(iOS 16.0, *)
+public struct ContextMenuButton: View {
+    
+    let title: String
+    let icon: String
+    let action: () -> Void
+    let role: ButtonRole?
+    
+    public init( _ title: String, icon: String, role: ButtonRole? = nil, action: @escaping () -> Void) {
+        self.title = title
+        self.icon = icon
+        self.role = role
+        self.action = action
+    }
+    
+    public var body: some View {
+            
+        Button(role: role, action: action) {
+            Label(title, systemImage: icon)
+        }
     }
 }

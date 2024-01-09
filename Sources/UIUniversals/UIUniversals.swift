@@ -326,7 +326,7 @@ public struct Divider: View {
         Rectangle()
             .if(vertical) { view in view.frame(width: strokeWidth) }
             .if(!vertical) { view in view.frame(height: strokeWidth) }
-            .foregroundStyle(color)
+//            .foregroundStyle(color)
     }
 }
 

@@ -67,7 +67,7 @@ public class Colors {
     public static let blue = makeColor(69, 121, 251)
     public static let red = makeColor(236, 81, 46)
     
-    static func makeColor( _ r: CGFloat, _ g: CGFloat, _ b: CGFloat ) -> Color {
+    public static func makeColor( _ r: CGFloat, _ g: CGFloat, _ b: CGFloat ) -> Color {
         Color(red: r / 255, green: g / 255, blue: b / 255)
     }
     

@@ -322,15 +322,19 @@ public struct UnderlinedButton: View {
     let title: String
     let icon: String
 
+    let scale: Bool
+    
     let condition: () -> Bool
     let action: () -> Void
     
     public init( _ title: String,
                  icon: String = "",
+                 scale: Bool = false,
                  condition: @escaping () -> Bool,
                  action: @escaping () -> Void ) {
         self.title = title
         self.icon = icon
+        self.scale = scale
         self.condition = condition
         self.action = action
         
@@ -345,7 +349,9 @@ public struct UnderlinedButton: View {
                                    size: Constants.UISubHeaderTextSize,
                                    font: Constants.mainFont,
                                    case: .uppercase,
-                                   wrap: false)
+                                   wrap: false,
+                                   scale: scale
+                    )
                     
                     if !icon.isEmpty { Image(systemName: icon) }
                 }
@@ -354,7 +360,7 @@ public struct UnderlinedButton: View {
             }
             
             .universalStyledBackgrond( condition() ? .accent : .secondary, onForeground: true)
-            .padding(.horizontal)
+//            .padding(.horizontal)
             
         } action: { action() }
     }

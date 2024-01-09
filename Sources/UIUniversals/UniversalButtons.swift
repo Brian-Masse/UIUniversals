@@ -344,16 +344,24 @@ public struct UnderlinedButton: View {
         
         UniversalButton(shouldAnimate: false) {
             VStack(spacing: 0) {
-                HStack {
-                    UniversalText( title,
+                ZStack {
+                    UniversalText( "H",
                                    size: Constants.UISubHeaderTextSize,
                                    font: Constants.mainFont,
-                                   case: .uppercase,
-                                   wrap: false,
-                                   scale: scale
-                    )
-                    
-                    if !icon.isEmpty { Image(systemName: icon) }
+                                   case: .uppercase)
+                    .foregroundStyle(.clear)
+                        
+                    HStack {
+                        UniversalText( title,
+                                       size: Constants.UISubHeaderTextSize,
+                                       font: Constants.mainFont,
+                                       case: .uppercase,
+                                       wrap: false,
+                                       scale: scale
+                        )
+                        
+                        if !icon.isEmpty { Image(systemName: icon) }
+                    }
                 }
                 
                 Divider(strokeWidth: 3)

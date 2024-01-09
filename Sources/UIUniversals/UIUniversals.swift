@@ -180,6 +180,11 @@ public struct ResizeableIcon: View {
     let icon: String
     let size: CGFloat
     
+    public init( _ icon: String, size: CGFloat ) {
+        self.icon = icon
+        self.size = size
+    }
+    
     public var body: some View {
         Image(systemName: icon)
             .resizable()

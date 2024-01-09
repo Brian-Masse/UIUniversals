@@ -26,7 +26,10 @@ struct TestingView: View {
             
             LargeRoundedButton( "hello", icon: "arrow.forward", style: .transparent ) { }
             
-            UnderlinedButton("test", toggle: $toggle)
+            UnderlinedButton("hello", icon: "arrow.up") { toggle } action: {
+                toggle.toggle()
+            }
+
         }
         
     }
@@ -318,13 +321,19 @@ public struct UnderlinedButton: View {
     
     let title: String
     let icon: String
+
+    let condition: () -> Bool
+    let action: () -> Void
     
-    @Binding var toggle: Bool
-    
-    public init( _ title: String, icon: String = "", toggle: Binding<Bool>) {
+    public init( _ title: String,
+                 icon: String = "",
+                 condition: @escaping () -> Bool,
+                 action: @escaping () -> Void ) {
         self.title = title
         self.icon = icon
-        self._toggle = toggle
+        self.condition = condition
+        self.action = action
+        
     }
     
     public var body: some View {
@@ -344,10 +353,10 @@ public struct UnderlinedButton: View {
                 Divider(strokeWidth: 3)
             }
             
-            .universalStyledBackgrond( toggle ? .accent : .secondary, onForeground: true)
+            .universalStyledBackgrond( condition() ? .accent : .secondary, onForeground: true)
             .padding(.horizontal)
             
-        } action: { toggle.toggle()}
+        } action: { action() }
     }
     
 }

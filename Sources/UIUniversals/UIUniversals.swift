@@ -4,7 +4,7 @@
 import Foundation
 import SwiftUI
 
-@available(iOS 15.0, *)
+@available(iOS 16.0, *)
 private struct TestView: View {
     
     init() { ProvidedFont.registerFonts() }
@@ -82,7 +82,7 @@ private struct TestView: View {
     }
 }
 
-@available(iOS 15.0, *)
+@available(iOS 16.0, *)
 #Preview {
     TestView()
 }

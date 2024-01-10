@@ -15,20 +15,27 @@ struct TestingView: View {
     
     var body: some View {
         VStack {
-            LargeTextButton("hel lo",
-                            at: 45,
-                            aspectRatio: 1.5,
-                            verticalTextAlignment: .bottom,
-                            arrowDirection: .up) {
-                
-                print("hi!")
-            }
+//            LargeTextButton("hel lo",
+//                            at: 45,
+//                            aspectRatio: 1.5,
+//                            verticalTextAlignment: .bottom,
+//                            arrowDirection: .up) {
+//                
+//                print("hi!")
+//            }
+//            
+//            LargeRoundedButton( "hello", icon: "arrow.forward", style: .transparent ) { }
+//            
+//            UnderlinedButton("hello", icon: "arrow.up") { toggle } action: {
+//                toggle.toggle()
+//            }
             
-            LargeRoundedButton( "hello", icon: "arrow.forward", style: .transparent ) { }
-            
-            UnderlinedButton("hello", icon: "arrow.up") { toggle } action: {
-                toggle.toggle()
-            }
+            UniversalText("Hello world!", size: Constants.UISubHeaderTextSize, font: ProvidedFont.syneHeavy)
+                .rectangularBackground(style: .primary,
+                                       stroke: true,
+                                       strokeWidth: 5,
+                                       cornerRadius: 20,
+                                       corners: [.topRight, .bottomLeft])
 
         }
         

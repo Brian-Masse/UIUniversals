@@ -140,7 +140,7 @@ public extension View {
 }
 
 //MARK: Rectangular Background
-@available(iOS 15.0, *)
+@available(iOS 16.0, *)
 private struct RectangularBackground: ViewModifier {
     
     @Environment(\.colorScheme) var colorScheme
@@ -149,9 +149,13 @@ private struct RectangularBackground: ViewModifier {
     
     let padding: CGFloat?
     let cornerRadius: CGFloat
+    var corners: UIRectCorner
     let stroke: Bool
+    let strokeWidth: CGFloat
     let texture: Bool
     let shadow: Bool
+    
+//    private func getCornerRadius() ->
     
     func body(content: Content) -> some View {
         content
@@ -173,11 +177,15 @@ private struct RectangularBackground: ViewModifier {
             .if(stroke) { view in
                 view
                     .overlay(
-                        RoundedRectangle(cornerRadius: cornerRadius)
-                            .stroke(colorScheme == .dark ? .white : .black, lineWidth: 1)
+                        UnevenRoundedRectangle(topLeadingRadius:
+                                                corners.contains(.topLeft) ? cornerRadius : 0,
+                                               bottomLeadingRadius: corners.contains(.bottomLeft) ? cornerRadius : 0,
+                                               bottomTrailingRadius: corners.contains(.bottomRight) ? cornerRadius : 0,
+                                               topTrailingRadius: corners.contains(.topRight) ? cornerRadius : 0)
+                            .stroke(colorScheme == .dark ? .white : .black, lineWidth: strokeWidth)
                     )
             }
-            .cornerRadius(cornerRadius)
+            .cornerRadius(cornerRadius, corners: corners)
             .if(shadow) { view in
                 view
                     .shadow(color: .black.opacity(0.2),
@@ -187,21 +195,25 @@ private struct RectangularBackground: ViewModifier {
     }
 }
 
-@available(iOS 15.0, *)
+@available(iOS 16.0, *)
 public extension View {
     func rectangularBackground(_ padding: CGFloat? = nil,
-                                     style: UniversalStyle = .primary,
-                                     stroke: Bool = false,
-                                     cornerRadius: CGFloat = Constants.UIDefaultCornerRadius,
-                                     texture: Bool = false,
-                                     shadow: Bool = false) -> some View {
+                               style: UniversalStyle = .primary,
+                               stroke: Bool = false,
+                               strokeWidth: CGFloat = 1,
+                               cornerRadius: CGFloat = Constants.UIDefaultCornerRadius,
+                               corners: UIRectCorner = .allCorners,
+                               texture: Bool = false,
+                               shadow: Bool = false) -> some View {
         
         modifier(RectangularBackground(style: style,
-                                             padding: padding,
-                                             cornerRadius: cornerRadius, 
-                                             stroke: stroke,
-                                             texture: texture,
-                                             shadow: shadow))
+                                       padding: padding,
+                                       cornerRadius: cornerRadius,
+                                       corners: corners,
+                                       stroke: stroke,
+                                       strokeWidth: strokeWidth,
+                                       texture: texture,
+                                       shadow: shadow))
     }
 }
 

@@ -377,12 +377,12 @@ private struct UniversalStyledBackground: ViewModifier {
 }
 
 @available(iOS 15.0, *)
-extension View {
-    func universalforegroundStyle() -> some View {
+public extension View {
+    private func universalforegroundStyle() -> some View {
         modifier( UniversalforegroundStyle() )
     }
     
-    func universalBackgroundColor(ignoreSafeAreas: Edge.Set? = nil) -> some View {
+    private func universalBackgroundColor(ignoreSafeAreas: Edge.Set? = nil) -> some View {
         modifier( UniversalBackgroundColor(ignoreSafeAreas: ignoreSafeAreas) )
     }
     

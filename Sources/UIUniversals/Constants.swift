@@ -203,9 +203,11 @@ public struct FontProvider {
 
 
 //MARK: Constants
+///Constants is a container class for universal values. You can extend this class to hold more constant values for use in individual projects / views
 public class Constants {
     
-    //    font sizes
+//    font sizes
+//    These are standard fontSizes that work well with the fonts provided in UIUniversals. The variable name suggests their intended use. To see examples check out [this repo](https://github.com/Brian-Masse/UIUniversalsExample)
     public static let UILargeTextSize: CGFloat     = 130
     public static let UITitleTextSize: CGFloat     = 80
     public static let UIMainHeaderTextSize: CGFloat    = 60
@@ -214,30 +216,35 @@ public class Constants {
     public static let UIDefaultTextSize: CGFloat   = 20
     public static let UISmallTextSize: CGFloat     = 15
     
-    //    extra
-    public static let UIDefaultCornerRadius: CGFloat = 40
-    public static let UILargeCornerRadius: CGFloat = 55
-    public static let UIBottomOfPagePadding: CGFloat = 130
-    
-    //    forms
-    public static let UIFormSpacing      : CGFloat = 10
-    public static let UIFormPagePadding: CGFloat = 5
-    public static let UIFormSliderTextFieldWidth: CGFloat = 60
-    
-    
-    //    timings
+//    timings
+//    These are numeric representations of various common time scales. Swift measures all its time in seconds, so adding these values to date objects will produce the expected result. ie. `some date += Constants.DayTime advances the date by a day`
     public static let MinuteTime: Double = 60
     public static let HourTime: Double = 3600
     public static let DayTime: Double = 86400
     public static let WeekTime: Double = 604800
     public static let yearTime: Double = 31557600
     
-    //    fonts
-    public static let titleFont: UniversalFont = FontProvider[ .madeTommyRegular ]
-    public static let mainFont: UniversalFont = FontProvider[ .madeTommyRegular ]
+//    extra
+//    These are various additional constants.
+    public static let UIDefaultCornerRadius: CGFloat = 40
+    public static let UIBottomOfPagePadding: CGFloat = 130
+    
+//    fonts
+///    titleFont represents the font to be used across all titles in your app. It can be set using `setDefaultFonts`
+    public static var titleFont: UniversalFont = FontProvider[ .madeTommyRegular ]
+    
+    ///mainFont represents the font to be used in all non-title or heading texts in your app. It can be set using `setDefaultFonts`
+    public static var mainFont: UniversalFont = FontProvider[ .madeTommyRegular ]
+    
+    ///this function allows you to set different provided fonts, or custom fonts as the title / main font of your application. You can invoke main / title Fonts with the constants class. 
+    public static func setDefaultFonts( mainFont: UniversalFont? = nil, titleFont: UniversalFont? = nil ) {
+        Constants.titleFont = titleFont ?? Constants.titleFont
+        Constants.mainFont = mainFont ?? Constants.mainFont
+        
+    }
     
     
-    //    if there are any variables that need to be computed at the start, run their setup code here
+//    if there are any variables that need to be computed at the start, run their setup code here
     @MainActor
     static func setupConstants() {
     }

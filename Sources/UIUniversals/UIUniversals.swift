@@ -7,8 +7,6 @@ import SwiftUI
 @available(iOS 16.0, *)
 private struct TestView: View {
     
-    init() { ProvidedFont.registerFonts() }
-    
     struct TestData: Identifiable, Equatable {
         var data: String = ""
         let uuid: UUID = UUID()
@@ -42,7 +40,7 @@ private struct TestView: View {
                 HStack {
                     UniversalText( "Hello World!",
                                    size: Constants.UISubHeaderTextSize,
-                                   font: ProvidedFont.syneHeavy )
+                                   font: .syneHeavy )
                     
                     Image(systemName: "globe.americas")
                     
@@ -65,7 +63,7 @@ private struct TestView: View {
                 Divider()
                 
                 WrappedHStack(collection: data, spacing: 5) { obj in
-                    UniversalText( obj.data, size: Constants.UIDefaultTextSize, font: ProvidedFont.renoMono )
+                    UniversalText( obj.data, size: Constants.UIDefaultTextSize, font: .renoMono )
                         .rectangularBackground(7, style: .secondary, stroke: true)
                 }
                 
@@ -73,7 +71,7 @@ private struct TestView: View {
                 
                 Spacer()
                 
-                UniversalText( "\(scrollPoint.y)", size: Constants.UIDefaultTextSize, font: ProvidedFont.renoMono )
+                UniversalText( "\(scrollPoint.y)", size: Constants.UIDefaultTextSize, font: .renoMono )
             }
             .padding()
         }
@@ -108,7 +106,7 @@ public struct UniversalText: View {
     
     public init(_ text: String,
                 size: CGFloat,
-                font: ProvidedFont = .madeTommyRegular,
+                font: FontManager.ProvidedFont = .madeTommyRegular,
                 case textCase: Text.Case? = nil,
                 wrap: Bool = true,
                 fixed: Bool = false,
@@ -119,7 +117,7 @@ public struct UniversalText: View {
     ) {
         self.text = text
         self.size = size
-        self.font = font.rawValue
+        self.font = font.getUniversalFont()
         self.textCase = textCase
         
         self.wrap = wrap

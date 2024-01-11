@@ -13,24 +13,14 @@ struct TestingView: View {
     
     @State var toggle: Bool = false
     
+    init() {
+        FontManager.registerFonts()
+        
+    }
+    
     var body: some View {
         VStack {
-//            LargeTextButton("hel lo",
-//                            at: 45,
-//                            aspectRatio: 1.5,
-//                            verticalTextAlignment: .bottom,
-//                            arrowDirection: .up) {
-//                
-//                print("hi!")
-//            }
-//            
-//            LargeRoundedButton( "hello", icon: "arrow.forward", style: .transparent ) { }
-//            
-//            UnderlinedButton("hello", icon: "arrow.up") { toggle } action: {
-//                toggle.toggle()
-//            }
-            
-            UniversalText("Hello world!", size: Constants.UISubHeaderTextSize, font: ProvidedFont.syneHeavy)
+            UniversalText("Hello world!", size: Constants.UISubHeaderTextSize, font: .renoMono)
                 .rectangularBackground(style: .primary,
                                        stroke: true,
                                        strokeWidth: 5,

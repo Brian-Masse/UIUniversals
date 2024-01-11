@@ -127,7 +127,7 @@ private struct UniversalTextField: ViewModifier {
     func body(content: Content) -> some View {
         content
             .tint(Colors.tint)
-            .font(Font.custom(ProvidedFont.renoMono.rawValue, size: Constants.UIDefaultTextSize))
+            .font(Font.custom(FontManager.ProvidedFont.renoMono.getUniversalFont(), size: Constants.UIDefaultTextSize))
     }
 }
 

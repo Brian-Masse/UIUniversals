@@ -109,24 +109,53 @@ public class Colors {
 }
 
 //MARK: ProvidedFonts
+///for any custom font to be used by UIUniversal views, such as UniversalText, they must be a struct
+///conforming to this protocol
+///`postScriptName` is the exact postScript name of the font, excluding extension
+///the file name of the font should be renamed to this postscript name.
+public protocol UniversalFont {
+    var postScriptName: String { get }
+    var fontExtension: String { get }
+}
 
-public enum ProvidedFont: String, CaseIterable, Identifiable {
-    
-    public static var registeredDefaultFonts: Bool = false
-    
-    case madeTommyRegular = "MadeTommy"
-    case renoMono = "RenoMono-Regular"
-    case syneHeavy = "Syne-Bold"
-    
-    private func getExtension() -> String {
-        switch self {
-        case .syneHeavy: return "ttf"
-        default: return "otf"
+///these structs are the provided fonts in the UIUniversals package
+private struct MadeTommyRegular: UniversalFont {
+    var postScriptName: String = "MadeTommy"
+    var fontExtension: String = "otf"
+}
+
+private struct RenoMono: UniversalFont {
+    var postScriptName: String = "RenoMono-Regular"
+    var fontExtension: String = "otf"
+}
+
+private struct SyneHeavy: UniversalFont {
+    var postScriptName: String = "Syne-Bold"
+    var fontExtension: String = "ttf"
+}
+
+///This handles font registration and access.
+///`providedFonts` is the internal list of UniversalFont structures contained in this package
+///`ProvidedFont` is an enum designed to make accessing those fonts easier. Struct slike UniversalText take a ProvidedFont as an input to get dot syntax conveniencel. In reality they are just pointers to elements in the providedFonts list
+/// `registerFont` reigsters a passed font. It is only required for fonts provided by the package and should not be invoked anywhere else
+/// `registerFonts` should be call at the start of an app's lifecycle to register all the provided fonts
+public struct FontManager {
+    private static let providedFonts: [UniversalFont] = [
+        MadeTommyRegular(),
+        RenoMono(),
+        SyneHeavy()
+    ]
+
+    public enum ProvidedFont: Int, CaseIterable, Identifiable {
+        case madeTommyRegular
+        case renoMono
+        case syneHeavy
+        
+        public var id: Int { self.rawValue }
+        
+        func getUniversalFont() -> String {
+            FontManager.providedFonts[ self.rawValue ].postScriptName
         }
-    }
-    
-    public var id: String {
-        self.rawValue
     }
     
     fileprivate static func registerFont(bundle: Bundle, fontName: String, fontExtension: String) {
@@ -141,21 +170,23 @@ public enum ProvidedFont: String, CaseIterable, Identifiable {
         CTFontManagerRegisterGraphicsFont(font, &error)
     }
     
+    public static var registeredDefaultFonts: Bool = false
     public static func registerFonts() {
         
         if registeredDefaultFonts { return }
         
-        for font in ProvidedFont.allCases {
-            let fontExtension = font.getExtension()
+        for font in FontManager.providedFonts {
+            let fontExtension = font.fontExtension
             
-            ProvidedFont.registerFont(bundle: .module,
-                                      fontName: font.rawValue,
-                                      fontExtension: fontExtension)
+            FontManager.registerFont(bundle: .module,
+                                     fontName: font.postScriptName,
+                                     fontExtension: fontExtension)
         }
         
         registeredDefaultFonts = true
     }
 }
+
 
 //MARK: Constants
 public class Constants {
@@ -188,8 +219,8 @@ public class Constants {
     public static let yearTime: Double = 31557600
     
     //    fonts
-    public static let titleFont: ProvidedFont = .madeTommyRegular
-    public static let mainFont: ProvidedFont = .madeTommyRegular
+    public static let titleFont: FontManager.ProvidedFont = .madeTommyRegular
+    public static let mainFont: FontManager.ProvidedFont = .madeTommyRegular
     
     
     //    if there are any variables that need to be computed at the start, run their setup code here

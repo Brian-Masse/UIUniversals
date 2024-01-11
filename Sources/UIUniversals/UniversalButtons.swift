@@ -14,13 +14,13 @@ struct TestingView: View {
     @State var toggle: Bool = false
     
     init() {
-        FontManager.registerFonts()
+        FontProvider.registerFonts()
         
     }
     
     var body: some View {
         VStack {
-            UniversalText("Hello world!", size: Constants.UISubHeaderTextSize, font: .renoMono)
+            UniversalText("Hello world!", size: Constants.UISubHeaderTextSize, font: FontProvider[.renoMono])
                 .rectangularBackground(style: .primary,
                                        stroke: true,
                                        strokeWidth: 5,
@@ -289,7 +289,7 @@ public struct LargeRoundedButton: View {
             HStack {
                 if wide { Spacer() }
                 if label != "" {
-                    UniversalText(label, size: Constants.UISubHeaderTextSize, font: .syneHeavy)
+                    UniversalText(label, size: Constants.UISubHeaderTextSize, font: FontProvider[.syneHeavy])
                         .minimumScaleFactor(0.7)
                         .lineLimit(1)
                 }

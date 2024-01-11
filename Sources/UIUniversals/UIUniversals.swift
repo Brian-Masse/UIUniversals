@@ -40,7 +40,7 @@ private struct TestView: View {
                 HStack {
                     UniversalText( "Hello World!",
                                    size: Constants.UISubHeaderTextSize,
-                                   font: .syneHeavy )
+                                   font: FontProvider[.syneHeavy] )
                     
                     Image(systemName: "globe.americas")
                     
@@ -63,7 +63,7 @@ private struct TestView: View {
                 Divider()
                 
                 WrappedHStack(collection: data, spacing: 5) { obj in
-                    UniversalText( obj.data, size: Constants.UIDefaultTextSize, font: .renoMono )
+                    UniversalText( obj.data, size: Constants.UIDefaultTextSize, font: FontProvider[.renoMono] )
                         .rectangularBackground(7, style: .secondary, stroke: true)
                 }
                 
@@ -71,7 +71,7 @@ private struct TestView: View {
                 
                 Spacer()
                 
-                UniversalText( "\(scrollPoint.y)", size: Constants.UIDefaultTextSize, font: .renoMono )
+                UniversalText( "\(scrollPoint.y)", size: Constants.UIDefaultTextSize, font: FontProvider[.renoMono] )
             }
             .padding()
         }
@@ -106,7 +106,7 @@ public struct UniversalText: View {
     
     public init(_ text: String,
                 size: CGFloat,
-                font: FontManager.ProvidedFont = .madeTommyRegular,
+                font: UniversalFont = FontProvider[.madeTommyRegular],
                 case textCase: Text.Case? = nil,
                 wrap: Bool = true,
                 fixed: Bool = false,
@@ -117,7 +117,7 @@ public struct UniversalText: View {
     ) {
         self.text = text
         self.size = size
-        self.font = font.getUniversalFont()
+        self.font = font.postScriptName
         self.textCase = textCase
         
         self.wrap = wrap

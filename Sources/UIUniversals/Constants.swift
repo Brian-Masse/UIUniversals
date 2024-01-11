@@ -136,10 +136,10 @@ private struct SyneHeavy: UniversalFont {
 
 ///This handles font registration and access.
 ///`providedFonts` is the internal list of UniversalFont structures contained in this package
-///`ProvidedFont` is an enum designed to make accessing those fonts easier. Struct slike UniversalText take a ProvidedFont as an input to get dot syntax conveniencel. In reality they are just pointers to elements in the providedFonts list
+///`ProvidedFont` is an enum designed to make accessing those fonts easier. Structs like UniversalText take a UniversalFont; ProvidedFont provides dot syntax convenience to access those fonts. In reality each case is just a pointer to an element in the providedFonts list
 /// `registerFont` reigsters a passed font. It is only required for fonts provided by the package and should not be invoked anywhere else
 /// `registerFonts` should be call at the start of an app's lifecycle to register all the provided fonts
-public struct FontManager {
+public struct FontProvider {
     private static let providedFonts: [UniversalFont] = [
         MadeTommyRegular(),
         RenoMono(),
@@ -153,8 +153,12 @@ public struct FontManager {
         
         public var id: Int { self.rawValue }
         
+        public func font() -> UniversalFont {
+            FontProvider.providedFonts[ self.rawValue ]
+        }
+        
         func getUniversalFont() -> String {
-            FontManager.providedFonts[ self.rawValue ].postScriptName
+            FontProvider.providedFonts[ self.rawValue ].postScriptName
         }
     }
     
@@ -170,15 +174,19 @@ public struct FontManager {
         CTFontManagerRegisterGraphicsFont(font, &error)
     }
     
+    public static subscript( font: FontProvider.ProvidedFont ) -> UniversalFont {
+        font.font()
+    }
+    
     public static var registeredDefaultFonts: Bool = false
     public static func registerFonts() {
         
         if registeredDefaultFonts { return }
         
-        for font in FontManager.providedFonts {
+        for font in FontProvider.providedFonts {
             let fontExtension = font.fontExtension
             
-            FontManager.registerFont(bundle: .module,
+            FontProvider.registerFont(bundle: .module,
                                      fontName: font.postScriptName,
                                      fontExtension: fontExtension)
         }
@@ -219,8 +227,8 @@ public class Constants {
     public static let yearTime: Double = 31557600
     
     //    fonts
-    public static let titleFont: FontManager.ProvidedFont = .madeTommyRegular
-    public static let mainFont: FontManager.ProvidedFont = .madeTommyRegular
+    public static let titleFont: UniversalFont = FontProvider[ .madeTommyRegular ]
+    public static let mainFont: UniversalFont = FontProvider[ .madeTommyRegular ]
     
     
     //    if there are any variables that need to be computed at the start, run their setup code here

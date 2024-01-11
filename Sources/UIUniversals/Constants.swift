@@ -109,27 +109,33 @@ public class Colors {
 }
 
 //MARK: ProvidedFonts
-///for any custom font to be used by UIUniversal views, such as UniversalText, they must be a struct
-///conforming to this protocol
+///Any  custom font used by UIUniversal views, such as UniversalText,  must conform to this protocol
 ///`postScriptName` is the exact postScript name of the font, excluding extension
 ///the file name of the font should be renamed to this postscript name.
 public protocol UniversalFont {
     var postScriptName: String { get }
     var fontExtension: String { get }
+    static var shared: UniversalFont { get }
 }
 
 ///these structs are the provided fonts in the UIUniversals package
 private struct MadeTommyRegular: UniversalFont {
+    static var shared: UniversalFont = MadeTommyRegular()
+    
     var postScriptName: String = "MadeTommy"
     var fontExtension: String = "otf"
 }
 
 private struct RenoMono: UniversalFont {
+    static var shared: UniversalFont = RenoMono()
+    
     var postScriptName: String = "RenoMono-Regular"
     var fontExtension: String = "otf"
 }
 
 private struct SyneHeavy: UniversalFont {
+    static var shared: UniversalFont = SyneHeavy()
+    
     var postScriptName: String = "Syne-Bold"
     var fontExtension: String = "ttf"
 }
@@ -141,9 +147,9 @@ private struct SyneHeavy: UniversalFont {
 /// `registerFonts` should be call at the start of an app's lifecycle to register all the provided fonts
 public struct FontProvider {
     private static let providedFonts: [UniversalFont] = [
-        MadeTommyRegular(),
-        RenoMono(),
-        SyneHeavy()
+        MadeTommyRegular.shared,
+        RenoMono.shared,
+        SyneHeavy.shared
     ]
 
     public enum ProvidedFont: Int, CaseIterable, Identifiable {

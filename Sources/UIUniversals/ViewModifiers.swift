@@ -10,18 +10,6 @@ import SwiftUI
 
 let inDev: Bool = false
 
-public enum UniversalStyle: String, Identifiable {
-    case primary
-    case secondary
-    case transparent
-    case accent
-    
-    public var id: String {
-        self.rawValue
-    }
-}
-
-
 //MARK: UniversalBackground
 @available(iOS 15.0, *)
 private struct UniversalBackground: ViewModifier {
@@ -124,9 +112,11 @@ public extension View {
 
 @available(iOS 15.0, *)
 private struct UniversalTextField: ViewModifier {
+    @Environment( \.colorScheme ) var colorScheme
+        
     func body(content: Content) -> some View {
         content
-            .tint(Colors.tint)
+            .tint(Colors.getAccent(from: colorScheme) )
             .font(Font.custom(FontProvider.ProvidedFont.renoMono.getUniversalFont(), size: Constants.UIDefaultTextSize))
     }
 }

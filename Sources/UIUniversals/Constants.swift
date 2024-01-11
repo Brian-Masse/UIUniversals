@@ -8,14 +8,28 @@
 import Foundation
 import SwiftUI
 
+///UniversalStyle is an enum representing the four core styles provided by UIUniversals. Most views / viewModifiers accept a universalStyle arg as a way to specify the style of a component.
+public enum UniversalStyle: String, Identifiable {
+    ///associated with the accent colors of the app
+    case accent
+    ///associated with the base colors of the app
+    case primary
+    ///associated with the secondary colors of the app
+    case secondary
+    ///not associated with any colors, makes materials .ultraThinMaterial
+    case transparent
+    
+    public var id: String {
+        self.rawValue
+    }
+}
+
 //MARK: Colors
+///The colors class is a container for default and provided colors. Base Colors and the accent Colors can be modified via the `setColors` method. The class can be extended to house additional default Colors for an application.
 @available(iOS 13.0, *)
 public class Colors {
-    public static var tint: Color { Colors.main }
-    public static var main: Color { lightAccent }
     
-    public static var colorOptions: [Color] = [ lightAccent, blue, purple, grape, pink, red, yellow,  ]
-    
+    ///The getAccent function takes in an iOS ColorScheme and returns the corresponding accent color.
     public static func getAccent(from colorScheme: ColorScheme) -> Color {
         switch colorScheme {
         case .light: return Colors.lightAccent
@@ -25,6 +39,7 @@ public class Colors {
         }
     }
     
+    ///The getBase function takes in an iOS ColorScheme and returns the corresponding base color.
     public static func getBase(from colorScheme: ColorScheme) -> Color {
         switch colorScheme {
         case .light: return Colors.baseLight
@@ -34,6 +49,7 @@ public class Colors {
         }
     }
     
+    ///The getSecondaryBase function takes in an iOS ColorScheme and returns the corresponding secondary color.
     public static func getSecondaryBase(from colorScheme: ColorScheme) -> Color {
         switch colorScheme {
         case .light: return Colors.secondaryLight
@@ -43,6 +59,7 @@ public class Colors {
         }
     }
     
+    ///the getColor function takes in a style and an iOS ColorScheme and returns the corresponding color in the right color scheme. See `UniversalStyle` for more information on which styles are associated with which colors.
     public static func getColor(from style: UniversalStyle, in colorScheme: ColorScheme) -> Color {
         switch style {
         case .primary: return getBase(from: colorScheme)
@@ -52,12 +69,19 @@ public class Colors {
         }
     }
     
+    ///These are your apps default base colors. These show up in backgrounds of buttons, text, views. They should generally be neutral and unintrusive colors. You can and should set individual values for light and dark mode.
     public static var baseLight = makeColor( 245, 234, 208 )
-    public static var secondaryLight = makeColor(220, 207, 188)
+    ///These are your apps default base colors. These show up in backgrounds of buttons, text, views. They should generally be neutral and unintrusive colors. You can and should set individual values for light and dark mode.
     public static var baseDark = makeColor( 0,0,0 )
+    
+    ///These are your apps default secondary base colors. These show up on top of the base colors but are still intended for backgrounds of views. They should generally be neutral and unintrusive colors. You can and should set individual values for light and dark mode.
+    public static var secondaryLight = makeColor(220, 207, 188)
+    ///These are your apps default secondary base colors. These show up on top of the base colors but are still intended for backgrounds of views. They should generally be neutral and unintrusive colors. You can and should set individual values for light and dark mode.
     public static var secondaryDark = Color(red: 0.1, green: 0.1, blue: 0.1).opacity(0.9)
     
+    ///These are your apps accent colors. These show up on certain styled buttons, when typing in a TextField, or when highlighting content. You can set individual values for light and dark mode.
     public static var lightAccent = makeColor( 0, 87, 66)
+    ///These are your apps accent colors. These show up on certain styled buttons, when typing in a TextField, or when highlighting content. You can set individual values for light and dark mode.
     public static var darkAccent = makeColor( 0, 87, 66)
     
     public static let yellow = makeColor(234, 169, 40)
@@ -67,16 +91,18 @@ public class Colors {
     public static let blue = makeColor(69, 121, 251)
     public static let red = makeColor(236, 81, 46)
     
+    ///the makeColor function takes a red, green, and blue argument and returns a SwiftUI Color. All values are from 0 to 255. This function is entirely for convenience and to avoid using the built in rgb initializer on Color.
     public static func makeColor( _ r: CGFloat, _ g: CGFloat, _ b: CGFloat ) -> Color {
         Color(red: r / 255, green: g / 255, blue: b / 255)
     }
     
-    public static func setColors( baseLight:convenienceColor?=nil,
-                                  secondaryLight:convenienceColor?=nil,
-                                  baseDark:convenienceColor?=nil,
-                                  secondaryDark:convenienceColor?=nil,
-                                  lightAccent:convenienceColor?=nil,
-                                  darkAccent:convenienceColor?=nil ) {
+    ///This is a publicly accessible function to change the default accent, base, and secondary colors. Each arg is a convenienceColor, which is an abstracted representation of a SwiftUI Color, but allows you to quickly initialize them with red, green, and blue channels in base 255. If an argument is left as nil, it does not change that color.
+    public static func setColors( baseLight:ConvenienceColor?=nil,
+                                  secondaryLight:ConvenienceColor?=nil,
+                                  baseDark:ConvenienceColor?=nil,
+                                  secondaryDark:ConvenienceColor?=nil,
+                                  lightAccent:ConvenienceColor?=nil,
+                                  darkAccent:ConvenienceColor?=nil ) {
         
         Colors.baseLight =      baseLight?.convert() ?? Colors.baseLight
         Colors.secondaryLight = secondaryLight?.convert() ?? Colors.secondaryLight
@@ -89,7 +115,7 @@ public class Colors {
     }
     
 //    This is in base 255, and is used for easily passing colors into the setColors function
-    public struct convenienceColor {
+    public struct ConvenienceColor {
         let red: CGFloat
         let blue: CGFloat
         let green: CGFloat
@@ -236,7 +262,7 @@ public class Constants {
     ///mainFont represents the font to be used in all non-title or heading texts in your app. It can be set using `setDefaultFonts`
     public static var mainFont: UniversalFont = FontProvider[ .madeTommyRegular ]
     
-    ///this function allows you to set different provided fonts, or custom fonts as the title / main font of your application. You can invoke main / title Fonts with the constants class. 
+    ///this function allows you to set different provided fonts, or custom fonts as the title / main font of your application. You can invoke main / title Fonts with the constants class.
     public static func setDefaultFonts( mainFont: UniversalFont? = nil, titleFont: UniversalFont? = nil ) {
         Constants.titleFont = titleFont ?? Constants.titleFont
         Constants.mainFont = mainFont ?? Constants.mainFont

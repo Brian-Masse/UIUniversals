@@ -135,16 +135,15 @@ public class Colors {
 }
 
 //MARK: ProvidedFonts
-///Any  custom font used by UIUniversal views, such as UniversalText,  must conform to this protocol
-///`postScriptName` is the exact postScript name of the font, excluding extension
-///the file name of the font should be renamed to this postscript name.
+
+///the UniversalFont protocol is the foundation for the font system in UIUniversals. All fonts, both provided by the package and define by users need to conform to this protocol.
 public protocol UniversalFont {
     var postScriptName: String { get }
     var fontExtension: String { get }
     static var shared: UniversalFont { get }
 }
 
-///these structs are the provided fonts in the UIUniversals package
+///This is default font provided by UIUniversals
 private struct MadeTommyRegular: UniversalFont {
     static var shared: UniversalFont = MadeTommyRegular()
     
@@ -152,6 +151,7 @@ private struct MadeTommyRegular: UniversalFont {
     var fontExtension: String = "otf"
 }
 
+///This is default font provided by UIUniversals
 private struct RenoMono: UniversalFont {
     static var shared: UniversalFont = RenoMono()
     
@@ -159,6 +159,7 @@ private struct RenoMono: UniversalFont {
     var fontExtension: String = "otf"
 }
 
+///This is default font provided by UIUniversals
 private struct SyneHeavy: UniversalFont {
     static var shared: UniversalFont = SyneHeavy()
     
@@ -166,27 +167,29 @@ private struct SyneHeavy: UniversalFont {
     var fontExtension: String = "ttf"
 }
 
-///This handles font registration and access.
-///`providedFonts` is the internal list of UniversalFont structures contained in this package
-///`ProvidedFont` is an enum designed to make accessing those fonts easier. Structs like UniversalText take a UniversalFont; ProvidedFont provides dot syntax convenience to access those fonts. In reality each case is just a pointer to an element in the providedFonts list
-/// `registerFont` reigsters a passed font. It is only required for fonts provided by the package and should not be invoked anywhere else
-/// `registerFonts` should be call at the start of an app's lifecycle to register all the provided fonts
+
+///The FontProvider manages both the registration and access of the default provided fonts. It has a number of important convenience features for invoking fonts throughout the application. FontProvider has no initializers.
 public struct FontProvider {
+    
+///`providedFonts` is the internal list of UniversalFont structures contained in this package
     private static let providedFonts: [UniversalFont] = [
         MadeTommyRegular.shared,
         RenoMono.shared,
         SyneHeavy.shared
     ]
 
+///the ProvidedFont enum on FontProvider specifies the default fonts packaged in UIUniversals. This is a purely convenience feature to access the underlying stored UniversalFonts in the struct.
     public enum ProvidedFont: Int, CaseIterable, Identifiable {
+        ///a simple sans serif, light-weight font
         case madeTommyRegular
+        ///a designer mono-space font
         case renoMono
+        ///a wide format, sans-serif display font
         case syneHeavy
         
         public var id: Int { self.rawValue }
-        
         public func font() -> UniversalFont {
-            FontProvider.providedFonts[ self.rawValue ]
+            FontProvider.providedFonts[self.rawValue]
         }
         
         func getUniversalFont() -> String {
@@ -194,6 +197,7 @@ public struct FontProvider {
         }
     }
     
+    ///registers an individual font
     fileprivate static func registerFont(bundle: Bundle, fontName: String, fontExtension: String) {
         guard let fontURL = bundle.url(forResource: fontName, withExtension: fontExtension),
               let fontDataProvider = CGDataProvider(url: fontURL as CFURL),
@@ -206,11 +210,14 @@ public struct FontProvider {
         CTFontManagerRegisterGraphicsFont(font, &error)
     }
     
+    ///Any UIUniversal component that takes a custom font accepts a UniversalFont as an arg. For convenient access to the default provided fonts ProvidedFont has a subscript that takes in an instance of the ProvidedFont enum and returns the associated UniversalFont object. It is recommended to access fonts this way.
     public static subscript( font: FontProvider.ProvidedFont ) -> UniversalFont {
         font.font()
     }
     
     public static var registeredDefaultFonts: Bool = false
+    
+    ///the registerFonts method should be called at the start of the app lifecycle. It goes through all the default fonts provided by FontProvider and registers them in the local app environment. This is not necessary if you are not using the provided fonts. You can still use custom local fonts in your app without calling registerFonts()
     public static func registerFonts() {
         
         if registeredDefaultFonts { return }

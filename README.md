@@ -4,25 +4,73 @@ UIUniversals is a collection of custom swift & swiftUI views, viewModifiers, and
 
 _All components were created and are actively maintained by me, Brian Masse. If you have any question or suggestions, contact me at brianm25it@gmail.com_
 
-This README will act as the documentation for the package. You can search for specific view or function for an overview of their purpose, their call + parameters, and sample use cases. In addition to this document, descriptions of each component can be found in inline comments in the package itself. Additionally, I created a demonstration project [here](https://github.com/Brian-Masse/UIUniversalsExample) that demonstrates how to contextually use this package.
+This README will act as the documentation for the package. You can search for specific views or functions for an overview of their purpose, their call + parameters, and sample use cases. In addition to this document, descriptions of each component can be found in inline comments in the package itself. Additionally, I created a demonstration project [here](https://github.com/Brian-Masse/UIUniversalsExample) that demonstrates how to contextually use this package.
 
 # **Documentation**
 
-## Constants & Colors
+## **Fonts, ProvidedFont, and FontProvider**
 
-### **UniversalStyle**
+UIUniversals both provides default fonts as well as a system to define and access custom fonts in its views. The UIUniversal font system fixes the need to implement and initialize custom Fonts in the native SwiftUI .font viewModifier. This makes custom font usage more consistent and easier to implement.
+
+**_UniversalFont_**
+
+the UniversalFont protocol is the foundation for the font system in UIUniversals. All fonts, both provided by the package and define by users need to conform to this protocol.
+
+```
+public protocol UniversalFont {
+    var postScriptName: String { get }
+    var fontExtension: String { get }
+    static var shared: UniversalFont { get }
+}
+```
+
+**_FontProvider_**
+
+`public struct FontProvider`
+
+The FontProvider manages both the registration and access of the default provided fonts. It has a number of important convenience features for invoking fonts throughout the application. FontProvider has no initializers.
+
+`public enum ProvidedFont: Int, CaseIterable, Identifiable`
+
+the ProvidedFont enum on FontProvider specifies the default fonts packaged in UIUniversals. This is a purely convenience feature to access the underlying stored UniversalFonts in the struct.
+
+- `case .madeTommyRegular` a simple sans serif, light-weight font
+- `case .renoMono` a designer mono-space font
+- `case .syneHeavy` a wide format, sans-serif display font
+
+`registerFonts() -> Void`
+
+the registerFonts method should be called at the start of the app lifecycle. It goes through all the default fonts provided by FontProvider and registers them in the local app environment. This is not necessary if you are not using the provided fonts. You can still use custom local fonts in your app without calling registerFonts()
+
+**_Using & Accessing Fonts_**
+
+Any UIUniversal component that takes a custom font accepts a UniversalFont as an arg. For convenient access to the default provided fonts ProvidedFont has a subscript that takes in an instance of the ProvidedFont enum and returns the associated UniversalFont object. It is recommended to access fonts this way.
+
+`FontProvider[.madeTommyRegular]`
+
+If you copy the provided font files in `sources>fonts` and add them to your apps target + info.plist, you can access them in the default swiftUI Font.custom(_, _) initializer by accessing the postScriptName value of the UniversalFont objects.
+
+**_Creating & using custom fonts_**
+
+You can include custom font files in otf or ttf format in your project and use them with the rest of the UIUniversalsPackage.
+
+1. First include the font file in your project scope and add it to the relevant targets. Also include the file name in the `Fonts provided by Application` section of the info.plist.
+2. Create a struct that conforms to the UniversalFont protocol. Make sure the postScriptName is accurate, often it is different from the font file name.
+3. use the `public static var shared` property on your struct to pass to views that accept UniversalFont args.
+
+## **UniversalStyle**
 
 UniversalStyle is an enum representing the four core styles provided by UIUniversals. Most views / viewModifiers accept a universalStyle arg as a way to specify the style of a component.
 `public enum UniversalStyle: String, Identifiable`
 
-- `case  .accent` associated with the accent colors of the app
+- `case .accent` associated with the accent colors of the app
 - `case .primary` associated with the base colors of the app
 - `case .secondary` associated with the secondary colors of the app
 - `case .transparent` not associated with any colors, makes materials .ultraThinMaterial
 
 ---
 
-### **Constants**
+## **Constants**
 
 `public class Constants`
 
@@ -73,14 +121,14 @@ for a discussion on fonts in UIUniversals, see the fonts section.
 
 ---
 
-### **Colors**
+## **Colors**
 
 ```
 @available(iOS 13.0, *)
 public class Colors
 ```
 
-The colors class is a container for default and provided colors. Base Colors and the accent Colors can be modified via the `setColors` method. The class can be extended to house additional default Colors for an application.
+The colors class is a container for default and provided colors. Base Colors and the accent Colors can be modified via the `setColors` method. The class can be extended to house additional default Colors for an application. The Colors class has not initializers.
 
 **_Accent Color_**
 
@@ -97,7 +145,7 @@ The getAccent function takes in an iOS ColorScheme and returns the corresponding
 
 **_Base Color_**
 
-These are your apps default base colors. These show up in backgrounds of buttons, text, views. They should generally be neutral and unintrusive colors. You can and should set individual values for light and dark mode.
+These are your apps default base colors. These show up in backgrounds of buttons, text, and views. They should generally be neutral and unintrusive colors. You can and should set individual values for light and dark mode.
 
 ```
 public static var baseLight = makeColor( 245, 234, 208 )
@@ -105,11 +153,17 @@ public static var baseDark = makeColor( 0,0,0 )
 ```
 
 The getBase function takes in an iOS ColorScheme and returns the corresponding base color.
+
 `public static func getBase(from colorScheme: ColorScheme) -> Color`
 
 **_Secondary Color_**
 
 These are your apps default secondary base colors. These show up on top of the base colors but are still intended for backgrounds of views. They should generally be neutral and unintrusive colors. You can and should set individual values for light and dark mode.
+
+```
+public static var secondaryLight = makeColor(220, 207, 188)
+public static var secondaryDark = Color(red: 0.1, green: 0.1, blue: 0.1).opacity(0.9)
+```
 
 The getSecondaryBase function takes in an iOS ColorScheme and returns the corresponding secondary color.
 

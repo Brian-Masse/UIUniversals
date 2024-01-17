@@ -167,11 +167,8 @@ private struct RectangularBackground: ViewModifier {
             .if(stroke) { view in
                 view
                     .overlay(
-                        UnevenRoundedRectangle(topLeadingRadius:
-                                                corners.contains(.topLeft) ? cornerRadius : 0,
-                                               bottomLeadingRadius: corners.contains(.bottomLeft) ? cornerRadius : 0,
-                                               bottomTrailingRadius: corners.contains(.bottomRight) ? cornerRadius : 0,
-                                               topTrailingRadius: corners.contains(.topRight) ? cornerRadius : 0)
+                        RoundedCorner(radius: cornerRadius,
+                                      corners: corners)
                             .stroke(colorScheme == .dark ? .white : .black, lineWidth: strokeWidth)
                     )
             }

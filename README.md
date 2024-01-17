@@ -8,6 +8,53 @@ This README will act as the documentation for the package. You can search for sp
 
 # **Documentation**
 
+## **viewModifiers**
+
+These are a collection of custom viewModifiers, some aesthetic and some utilitarian. All are extensions of the View struct in SwiftUI, and can be invoked with dot syntax.
+
+### **_rectangularBackgrounds_**
+
+rectangularBackground applies a stylized background to any view it is attached to. By default it contains padding, rounding corners, and uses the .primary UniversalStyle.
+
+`private struct RectangularBackground: ViewModifier`
+
+```
+init( _ padding: CGFloat? = nil,
+    style: UniversalStyle = .primary,
+    stroke: Bool = false,
+    strokeWidth: CGFloat = 1,
+    cornerRadius: CGFloat = Constants.UIDefaultCornerRadius,
+    corners: UIRectCorner = .allCorners,
+    texture: Bool = false,
+    shadow: Bool = false )
+```
+
+- `padding` adds the specified padding to the content before applying the rectangular background. Defaults to nil, which uses Apple's defaults .padding() modifier.
+- `style` specifies which UniversalStyle to apply to the background. Defaults to .primary
+- `stroke` specifies whether or not add a stroke to the background. Defaults to false
+- `strokeWidth` specifies the width, in pixels, of the stroke. Defaults to 1.
+- `cornerRadius`specifies the cornerRadius of the background. Defaults to the default cornerRadius stored in Constants
+- `corners` specifies which corners to apply the cornerRadius to. Specified as a list of corners. Defaults to all corners
+- `texture` specifies whether to apply a paper texture to the rectangular background. Defaults to false
+- `shadow` specifies whether to apply a shadow to the background. The shadow is a 10pt blur, with a 0.2 opacity black color. Defaults to false
+
+### **_UniversalBackground_**
+
+`private struct UniversalBackground: ViewModifier`
+
+universalBackground applies a specific color to any view it is attached to. It always fills the frame and ignores the safe areas. The content will still respect safe areas. On any given navigation screen, there should only be one view with .rectangularBackground.
+
+```
+init(style: UniversalStyle = .primary,
+    padding: CGFloat = 0,
+    color: Color? = nil) -> some View
+)
+```
+
+- `style` specifies which UniversalStyle color to apply to the background. Defaults to .primary.
+- `padding` specifies the padding to be applies to the view. Padding is applied to all edges. Defaults to 0. It is best to apply the padding outside of the viewModifier to preserve shadow bleed.
+- `color` specifies the color to apply to the background. If a color is provided, it overrides Defaults to nil. 
+
 ## **Fonts, ProvidedFont, and FontProvider**
 
 UIUniversals both provides default fonts as well as a system to define and access custom fonts in its views. The UIUniversal font system fixes the need to implement and initialize custom Fonts in the native SwiftUI .font viewModifier. This makes custom font usage more consistent and easier to implement.

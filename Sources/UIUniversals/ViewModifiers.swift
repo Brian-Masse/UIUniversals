@@ -130,6 +130,8 @@ public extension View {
 }
 
 //MARK: Rectangular Background
+
+///rectangularBackground applies a stylized background to any view it is attached to. By default it contains padding, rounding corners, and uses the .primary UniversalStyle.
 @available(iOS 16.0, *)
 private struct RectangularBackground: ViewModifier {
     
@@ -144,9 +146,7 @@ private struct RectangularBackground: ViewModifier {
     let strokeWidth: CGFloat
     let texture: Bool
     let shadow: Bool
-    
-//    private func getCornerRadius() ->
-    
+
     func body(content: Content) -> some View {
         content
             .if(padding == nil) { view in view.padding() }

@@ -44,6 +44,7 @@ private struct TestView: View {
                     
                     Image(systemName: "globe.americas")
                     
+                    
                     Spacer()
                 }
                 .rectangularBackground(style: .transparent, shadow: true)
@@ -496,7 +497,7 @@ struct VerticalLayout: Layout {
     }
 }
 
-///RotatedLayout rotates the frame of a given view by a specified angle. This is useful if you want to more closely match the frame of a view with a `.rotationEffect`. In plain SwiftUI, a `.rotationEffect` does not change the frame at all, creating a mismatch between what is seen on screen and what is handled in layouting.
+///RotatedLayout rotates the frame of a given view by a specified angle. This is useful if you want to more closely match the frame of a view with a `.rotationEffect`. In plain SwiftUI, a `.rotationEffect` does not change the frame at all, creating a mismatch between what is seen on screen and what is handled in layouting. To see examples check out [this repo](https://github.com/Brian-Masse/UIUniversalsExample)
 @available(iOS 16.0, *)
 public struct RotatedLayout: Layout {
     //    radians

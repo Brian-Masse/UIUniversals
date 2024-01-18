@@ -345,7 +345,7 @@ public init(_ blur: CGFloat, blurHeight: CGFloat = 0.25, scrollPositionBinding: 
 
 `public struct RotatedLayout: Layout`
 
-RotatedLayout rotates the frame of a given view by a specified angle. This is useful if you want to more closely match the frame of a view with a `.rotationEffect`. In plain SwiftUI, a `.rotationEffect` does not change the frame at all, creating a mismatch between what is seen on screen and what is handled in layouting.
+RotatedLayout rotates the frame of a given view by a specified angle. This is useful if you want to more closely match the frame of a view with a `.rotationEffect`. In plain SwiftUI, a `.rotationEffect` does not change the frame at all, creating a mismatch between what is seen on screen and what is handled in layouting. To see examples check out [this repo](https://github.com/Brian-Masse/UIUniversalsExample)
 
 ```
 public init( at angle: Double, scale: Double = 1 )
@@ -353,6 +353,91 @@ public init( at angle: Double, scale: Double = 1 )
 
 - `angle` the angle to rotate the frame. Measured in Radians
 - `scale` the scale of the frame. If the rotated frame still does not closely match the apparent frame of the view, you can scale the frame down to get the intended layouting behavior.
+
+## **UniversalButtons**
+
+All UniversalButtons, when tapped play a default opacity animation and wrap their actions in a `withAnimation` block.
+
+### **_LargeTextButton_**
+
+`public struct LargeTextButton: View`
+
+The LargeTextButton is a pill shaped button that contains a brief amount of text and an arrow pointing along the direction of the button. It can be rotated 360 degrees, and stretched to fit the text. For the best effect it is recommended that the text be separated into multiple, short lines. ie. 'hello \nworld!' To see examples check out [this repo](https://github.com/Brian-Masse/UIUniversalsExample)
+
+```
+ public init( _ text: String,
+                 at angle: Double,
+                 aspectRatio: Double = 2,
+                 verticalTextAlignment: Alignment = .bottom,
+                 arrow: Bool = true,
+                 arrowDirection: ArrowDirection = .down,
+                 arrowWidth: CGFloat = 4,
+                 style: UniversalStyle = .accent,
+                 color: Color? = nil,
+                 width: CGFloat = 100,
+                 action: @escaping () -> Void
+    )
+```
+
+- `text` the text to display on the button. Any spaces in the text will be treated as new lines
+- `angle` the angle the button is at. Measured in degrees
+- `aspectRatio` the height-to-width aspect Ratio
+- `verticalTextAlignment` specifies wether the text is pushed to the bottom, center, or top of the button
+- `arrow` specifies wether to render an arrow. Defaults to true
+- `arrowDirection` specifies wether the arrow points up or down along the button
+- `arrowWidth` specifies the thickness of the arrow. Defaults to 4
+- `style` specifies the style of the button background. Defaults to UniversalStyle.primary
+- `color` specifies the color of the button background. If a value is provided, it overrides the style arg. Defaults to nil
+- `width` specifies the width of the button. Recommended to be kept at the default value. Defaults to 100
+- `action` the action of the button
+
+### **_LargeRoundedButton_**
+
+`public struct LargeRoundedButton: View`
+
+The LargeRoundedButton is a simple, pill shaped button that contains text and an SFSymbol icon. It also supports two states, a toggle on and a toggle off, which can display different labels / icons. To see examples check out [this repo](https://github.com/Brian-Masse/UIUniversalsExample)
+
+```
+public init( _ label: String, to completedLabel: String = "",
+                 icon: String, to completedIcon: String = "",
+                 wide: Bool = false,
+                 small: Bool = false,
+                 color: Color? = nil,
+                 style: UniversalStyle = .accent,
+                 completed: @escaping () -> Bool = {false},
+                 action: @escaping () -> Void )
+```
+
+- `label` the initial label on the button
+- `completedLabel` the label displayed when the button is toggled. Left empty, the label does not change
+- `icon` the name of the SFSymbol to be displayed on the button. Left empty, no symbol will be displayed
+- `completedIcon` the name of the SFSymbol to be displayed when the button is toggled. Left empty, the icon does not change
+- `wide` specifies wether the button fills all available horizontal space. Defaults to false
+- `small` specifies wether the button do not have vertical padding around its labels. Defaults to false
+- `color` specifies the color of the button background. If a value is provided, it overrides the style arg. Defaults to nil.
+- `style` specifies the style of the button background. Defaults to UniversalStyle.primary
+- `completed` is a computed boolean describing wether the button is in a toggled or untoggled state. Left blank, the button will always be untoggled.
+- `action` the action of the button
+
+### **_UnderlinedButton_**
+
+`public struct UnderlinedButton: View`
+
+The UnderlinedButton is a simple underlined label containing text and an SF icon. The button supports two states, a toggle on and a toggle off, which will either highlight the button in the app's accent color if on, or fade it into the background when it is toggled off. To see examples check out [this repo](https://github.com/Brian-Masse/UIUniversalsExample)
+
+```
+ public init( _ title: String,
+                 icon: String = "",
+                 scale: Bool = false,
+                 condition: @escaping () -> Bool = { false },
+                 action: @escaping () -> Void )
+```
+
+- `title` the string label on the button
+- `icon` the name of the SFSymbol to display alongside the title. If left empty, there will be no icon
+- `scale` specifies wether the text should scale to fit the space provided in the button. Defaults to false
+- `condition` is a computed boolean describing wether the button is in a toggled or untoggled state. Left blank, the button will always be untoggled.
+- `action` the action of the button
 
 ## **Constants**
 

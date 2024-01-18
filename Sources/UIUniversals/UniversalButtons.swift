@@ -78,6 +78,7 @@ private struct UniversalButton<C: View>: View {
 
 
 //MARK: LargeTextButton
+///The LargeTextButton is a pill shaped button that contains a brief amount of text and an arrow pointing along the direction of the button. It can be rotated 360 degrees, and stretched to fit the text. For the best effect it is recommended that the text be separated into multiple, short lines. ie. 'hello \nworld!' To see examples check out [this repo](https://github.com/Brian-Masse/UIUniversalsExample)
 @available(iOS 16.0, *)
 public struct LargeTextButton: View {
     
@@ -246,6 +247,7 @@ public struct LargeTextButton: View {
 }
 
 //MARK: LargeRoundedButton
+///The LargeRoundedButton is a simple, pill shaped button that contains text and an SFSymbol icon. It also supports two states, a toggle on and a toggle off, which can display different labels / icons. To see examples check out [this repo](https://github.com/Brian-Masse/UIUniversalsExample)
 @available(iOS 16.0, *)
 public struct LargeRoundedButton: View {
     
@@ -267,7 +269,14 @@ public struct LargeRoundedButton: View {
     
     @State var tempCompletion: Bool = false
     
-    public init( _ label: String, to completedLabel: String = "", icon: String, to completedIcon: String = "", wide: Bool = false, small: Bool = false, color: Color? = nil, style: UniversalStyle = .accent, completed: @escaping () -> Bool = {false}, action: @escaping () -> Void ) {
+    public init( _ label: String, to completedLabel: String = "",
+                 icon: String, to completedIcon: String = "",
+                 wide: Bool = false,
+                 small: Bool = false,
+                 color: Color? = nil,
+                 style: UniversalStyle = .accent,
+                 completed: @escaping () -> Bool = {false},
+                 action: @escaping () -> Void ) {
         self.label = label
         self.completedLabel = completedLabel
         self.icon = icon
@@ -311,6 +320,7 @@ public struct LargeRoundedButton: View {
 }
 
 //MARK: UnderlinedButton
+///The UnderlinedButton is a simple underlined label containing text and an SF icon. The button supports two states, a toggle on and a toggle off, which will either highlight the button in the app's accent color if on, or fade it into the background when it is toggled off. To see examples check out [this repo](https://github.com/Brian-Masse/UIUniversalsExample)
 @available(iOS 16.0, *)
 public struct UnderlinedButton: View {
     
@@ -327,7 +337,7 @@ public struct UnderlinedButton: View {
     public init( _ title: String,
                  icon: String = "",
                  scale: Bool = false,
-                 condition: @escaping () -> Bool,
+                 condition: @escaping () -> Bool = { false },
                  action: @escaping () -> Void ) {
         self.title = title
         self.icon = icon

@@ -6,6 +6,39 @@ _All components were created and are actively maintained by me, Brian Masse. If 
 
 This README will act as the documentation for the package. You can search for specific views or functions for an overview of their purpose, their call + parameters, and sample use cases. In addition to this document, descriptions of each component can be found in inline comments in the package itself. Additionally, I created a demonstration project [here](https://github.com/Brian-Masse/UIUniversalsExample) that demonstrates how to contextually use this package.
 
+# **Navigating the Documentation**
+
+- ### ViewModifiers
+
+  - **styled viewModifiers** These are a collection of viewModifiers designed to enhance the look and esthetic of your app. They primarily work off the UniversalStyle system for easily invoking default and consistent colors and styles.
+  - **utility viewModifiers** These are a collection of viewModifiers designed to extend the functionality of basic swiftUI structs. They have no body
+
+- ### Fonts, ProvidedFonts, and FontProvider
+
+  - This section describes how the `UIUniversals` Font system works, including how to invoked default provided fonts as well as create an use custom local fonts.
+
+- ### UniversalStyle
+
+  - This section describes the UniversalStyle system used across `UIUniversals`
+
+- ### UIUniversals
+
+  - UIUniversals is a collection of standalone Views / structs that in some way enhance the default SwiftUI experience. These include custom containers, advanced text wrappers, and scroll effects.
+
+- ### UniversalButtons
+
+  - This section is a collection of customizable, highly stylized buttons
+
+- ### Constants
+
+  - **constants** This is a collection of constants that can and should be invoked throughout the app. Examples of these constants include default textSize values, time measurements, and default fontStyles.
+  - **colors** This is a collection of default and customizable colors. This class makes up the bulk of your app's color pallette and ensure consistent color usage across the app. UniversalStyle reads its values from this class
+
+- ### Extensions
+  - A collection of useful extensions on a variety of default Swift Types.
+
+---
+
 # **Documentation**
 
 ## **viewModifiers**

@@ -10,6 +10,8 @@ This README will act as the documentation for the package. You can search for sp
 
 ## **viewModifiers**
 
+## **Styled ViewModifiers**
+
 These are a collection of custom viewModifiers, some aesthetic and some utilitarian. All are extensions of the View struct in SwiftUI, and can be invoked with dot syntax.
 
 ### **_rectangularBackgrounds_**
@@ -42,7 +44,7 @@ init( _ padding: CGFloat? = nil,
 
 `private struct UniversalBackground: ViewModifier`
 
-universalBackground applies a specific color to any view it is attached to. It always fills the frame and ignores the safe areas. The content will still respect safe areas. On any given navigation screen, there should only be one view with .rectangularBackground.
+universalBackground applies a specific color to any view it is attached to. It always fills the frame and ignores the safe areas. The content will still respect safe areas. On any given navigation screen, there should only be one view with .universalBackground.
 
 ```
 init(style: UniversalStyle = .primary,
@@ -53,7 +55,117 @@ init(style: UniversalStyle = .primary,
 
 - `style` specifies which UniversalStyle color to apply to the background. Defaults to .primary.
 - `padding` specifies the padding to be applies to the view. Padding is applied to all edges. Defaults to 0. It is best to apply the padding outside of the viewModifier to preserve shadow bleed.
-- `color` specifies the color to apply to the background. If a color is provided, it overrides Defaults to nil. 
+- `color` specifies the color to apply to the background. If a color is provided, it overrides the UniversalStyle arg. Defaults to nil.
+
+### **_UniversalImageBackground_**
+
+`private struct UniversalImageBackground: ViewModifier`
+
+universalImageBackground uses a specified SwiftUI Image for the background. The image is blurred, and a light or dark overlay is applied depending on the system colorScheme. It always fills the frame and ignores safe areas. The content will still respect safe areas. On any given navigation sreen, there should only be one view with .universalImageBackground.
+
+```
+init(_ image: Image)
+```
+
+- `image` the image to blur on the background
+
+### **_UniversalTextStyle_**
+
+`private struct UniversalTextStyle: ViewModifier`
+
+universalTextStyle dynamically changes the foreground style of the view it is applied to. By default its black when the system is in lightMode and white when the system is in darkMode. Although it is called universalTextStyle, it is intended to be used on views other than SwiftUI Text, to match the default behavior of text.
+
+```
+init(reversed: Bool = false)
+```
+
+- `reversed` when reversed, foregroundStyle is white on lightMode and black on darkMode. Reversed defaults to false.
+
+### **_UniversalTextField_**
+
+`private struct UniversalTextField: ViewModifier`
+
+universalTextField styles a given textField with the apps accent color, which changes depending on the system ColorScheme, and with a custom font.
+
+```
+init(_ font: UniversalFont = FontProvider[.renoMono])
+```
+
+- `font` the font to provide to text in the textField. Specified as a UniversalFont, which can be any of the fonts provided by UIUniversals, or a custom font conforming to the UniversalFont protocol. Defaults to RenoMono.
+
+### **_universalForegroundColor_**
+
+`private struct UniversalForegroundStyle: ViewModifier`
+
+universalForegroundStyle sets the foregroundStyle of a view to the correct accent color of the app depending on the system colorScheme. When the colorScheme changes, this viewModifier automatically updates the foregroundStyle with the correct color. It is not publicly accessible.
+
+```
+private func universalforegroundStyle() -> some View
+```
+
+### **_universalBackgroundColor_**
+
+`private struct UniversalBackgroundColor: ViewModifier`
+
+universalBackgroundStyle sets the background of a view to the correct accent color of the app depending on the system colorScheme. When the colorScheme changes, this viewModifier automatically updates the foregroundStyle with the correct color. It is not publicly accessible.
+
+```
+private func universalBackgroundColor() -> some View
+```
+
+### **_universalStyledBackground_**
+
+`private struct UniversalStyledBackground: ViewModifier`
+
+universalStyledBackground sets the background of a view to the correct color depending on the specified UniversalStyle and the system ColorScheme. It can also take a custom color to apply to the background. You can also to use these colors on the foreground of the view. When the colorScheme changes, this viewModifier automatically updates the style with the correct color. This modifier should be used instead of universalBackgroundColor or universalForegroundColor
+
+```
+init(_ style: UniversalStyle,
+    color: Color? = nil,
+    onForeground: Bool = false)
+```
+
+- `style` this is the UniversalStyle the modifier is using to determine the color of the background or foreground
+- `color` this specifies what color to make the background or foreground. If a value is provided, it overrides the style arg. It defaults to nil.
+- `onForeground` specifies whether the color should be applied to the foregroundStyle or the background of the view. It defaults to false
+
+## **Utility ViewModifiers**
+
+### **_onBecomingVisible_**
+
+`private struct BecomingVisible: ViewModifier`
+
+onBecomingVisible fires an action every time a view appears on the visible screen. As opposed to .onAppear() which only runs once the first time a view appears on screen, onVisible fires each time a view re-enters the screen.
+
+```
+init(perform action: @escaping () -> Void)
+```
+
+- `action` is a standard: () -> Void function. It cannot be async, but can contain Task blocks to run async functions.
+
+### **_hideKeyboard_**
+
+`func hideKeyboard()`
+
+the hideKeyboard extension on View minimizes the default iOS keyboard. It can called from a tap gesture, swipe gesture, or any other type of gesture to naturally dismiss the keyboard when a user focuses on another piece of content.
+
+```
+init()
+```
+
+### **_if_**
+
+`if<Content: View>`
+
+The if extension on View creates a conditional modifier, that applies a unique style when a certain condition is met. It automatically refreshes when the condition changes.
+
+```
+func `if`<Content: View>( _ condition: Bool, contentBuilder: (Self) -> Content ) -> some View
+```
+
+- `condition` the boolean value to trigger whether or not the conditional style is active. It is often best to use in-line condition statements. ie. value == 1
+
+- `contentBuilder` a generic contentBuilder that passes the view the modifier is attached to, into a function to be further modified. All modifiers specified in this contentBuilder are only applied if the condition is met.
 
 ## **Fonts, ProvidedFont, and FontProvider**
 

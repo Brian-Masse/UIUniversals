@@ -43,6 +43,7 @@ private struct UniversalBackground: ViewModifier {
 
 @available(iOS 15.0, *)
 public extension View {
+    ///universalBackground applies a specific color to any view it is attached to. It always fills the frame and ignores the safe areas. The content will still respect safe areas. On any given navigation screen, there should only be one view with .universalBackground.
     func universalBackground(style: UniversalStyle = .primary,
                              padding: CGFloat = 0,
                              color: Color? = nil) -> some View {
@@ -79,6 +80,7 @@ private struct UniversalImageBackground: ViewModifier {
 
 @available(iOS 15.0, *)
 public extension View {
+    ///universalImageBackground uses a specified SwiftUI Image for the background. The image is blurred, and a light or dark overlay is applied depending on the system colorScheme. It always fills the frame and ignores safe areas. The content will still respect safe areas. On any given navigation sreen, there should only be one view with .universalImageBackground.
     func universalImageBackground(_ image: Image) -> some View {
         modifier( UniversalImageBackground(image: image) )
     }
@@ -103,17 +105,19 @@ private struct UniversalTextStyle: ViewModifier {
 
 @available(iOS 15.0, *)
 public extension View {
+    ///universalTextStyle dynamically changes the foreground style of the view it is applied to. By default its black when the system is in lightMode and white when the system is in darkMode. Although it is called universalTextStyle, it is intended to be used on views other than SwiftUI Text, to match the default behavior of text.
     func universalTextStyle(reversed: Bool = false) -> some View {
         modifier(UniversalTextStyle( reversed: reversed ))
     }
 }
 
 //MARK: UniversalTextField
-
 @available(iOS 15.0, *)
 private struct UniversalTextField: ViewModifier {
     @Environment( \.colorScheme ) var colorScheme
         
+    let font: UniversalFont
+    
     func body(content: Content) -> some View {
         content
             .tint(Colors.getAccent(from: colorScheme) )
@@ -123,15 +127,14 @@ private struct UniversalTextField: ViewModifier {
 
 @available(iOS 15.0, *)
 public extension View {
-    func universalTextField() -> some View {
-        modifier(UniversalTextField())
+    ///universalTextField styles a given textField with the apps accent color, which changes depending on the system ColorScheme, and with a custom font.
+    func universalTextField(_ font: UniversalFont = FontProvider[.renoMono]) -> some View {
+        modifier(UniversalTextField(font: font))
     }
     
 }
 
 //MARK: Rectangular Background
-
-///rectangularBackground applies a stylized background to any view it is attached to. By default it contains padding, rounding corners, and uses the .primary UniversalStyle.
 @available(iOS 16.0, *)
 private struct RectangularBackground: ViewModifier {
     
@@ -184,6 +187,7 @@ private struct RectangularBackground: ViewModifier {
 
 @available(iOS 16.0, *)
 public extension View {
+    ///rectangularBackground applies a stylized background to any view it is attached to. By default it contains padding, rounded corners, and uses the .primary UniversalStyle.
     func rectangularBackground(_ padding: CGFloat? = nil,
                                style: UniversalStyle = .primary,
                                stroke: Bool = false,
@@ -227,7 +231,6 @@ public extension View {
 
 
 //MARK: Utilities
-
 @available(iOS 15.0, *)
 private struct BecomingVisible: ViewModifier {
     @State var action: (() -> Void)?
@@ -252,15 +255,6 @@ private struct BecomingVisible: ViewModifier {
     struct VisibleKey: PreferenceKey {
         static var defaultValue: Bool = false
         static func reduce(value: inout Bool, nextValue: () -> Bool) { }
-    }
-}
-
-@available(iOS 15.0, *)
-private struct Developer: ViewModifier {
-    func body(content: Content) -> some View {
-        if inDev {
-            content
-        }
     }
 }
 
@@ -293,26 +287,24 @@ public extension View {
         }
     }
     
+    ///onBecomingVisible fires an action every time a view appears on the visible screen. As opposed to .onAppear() which only runs once the first time a view appears on screen, onVisible fires each time a view re-enters the screen.
     func onBecomingVisible(perform action: @escaping () -> Void) -> some View {
         modifier(BecomingVisible(action: action))
     }
     
     #if canImport(UIKit)
+    ///the hideKeyboard extension on View minimizes the default iOS keyboard. It can called from a tap gesture, swipe gesture, or any other type of gesture to naturally dismiss the keyboard when a user focuses on another piece of content.
     func hideKeyboard() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
     #endif
 
-    
+    ///The if extension on View creates a conditional modifier, that applies a unique style when a certain condition is met. It automatically refreshes when the condition changes.
     @ViewBuilder
     func `if`<Content: View>( _ condition: Bool, contentBuilder: (Self) -> Content ) -> some View {
         if condition {
             contentBuilder(self)
         } else { self }
-    }
-
-    func developer() -> some View {
-        modifier( Developer() )
     }
 }
 
@@ -365,15 +357,20 @@ private struct UniversalStyledBackground: ViewModifier {
 
 @available(iOS 15.0, *)
 public extension View {
+    ///universalForegroundStyle sets the foregroundStyle of a view to the correct accent color of the app depending on the system colorScheme. When the colorScheme changes, this viewModifier automatically updates the foregroundStyle with the correct color. It is not publicly accessible.
     private func universalforegroundStyle() -> some View {
         modifier( UniversalforegroundStyle() )
     }
     
+    ///universalBackgroundStyle sets the background of a view to the correct accent color of the app depending on the system colorScheme. When the colorScheme changes, this viewModifier automatically updates the foregroundStyle with the correct color. It is not publicly accessible.
     private func universalBackgroundColor(ignoreSafeAreas: Edge.Set? = nil) -> some View {
         modifier( UniversalBackgroundColor(ignoreSafeAreas: ignoreSafeAreas) )
     }
     
-    func universalStyledBackgrond( _ style: UniversalStyle, color: Color? = nil, onForeground: Bool = false ) -> some View {
+    ///universalStyledBackground sets the background of a view to the correct color depending on the specified UniversalStyle and the system ColorScheme. It can also take a custom color to apply to the background. You can also to use these colors on the foreground of the view. When the colorScheme changes, this viewModifier automatically updates the style with the correct color. This modifier should be used instead of universalBackgroundColor or universalForegroundColor
+    func universalStyledBackgrond( _ style: UniversalStyle,
+                                   color: Color? = nil,
+                                   onForeground: Bool = false ) -> some View {
         modifier( UniversalStyledBackground(style: style, color: color, foregrond: onForeground) )
     }
 }

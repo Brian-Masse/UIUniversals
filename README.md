@@ -149,10 +149,6 @@ init(perform action: @escaping () -> Void)
 
 the hideKeyboard extension on View minimizes the default iOS keyboard. It can called from a tap gesture, swipe gesture, or any other type of gesture to naturally dismiss the keyboard when a user focuses on another piece of content.
 
-```
-init()
-```
-
 ### **_if_**
 
 `if<Content: View>`
@@ -367,3 +363,146 @@ This is a publicly accessible function to change the default accent, base, and s
 the getColor function takes in a style and an iOS ColorScheme and returns the corresponding color in the right color scheme. See `UniversalStyle` for more information on which styles are associated with which colors.
 
 `public static func getColor(from style: UniversalStyle, in colorScheme: ColorScheme)`
+
+## **Extensions**
+
+## **_Color_**
+
+### _Color.components_
+
+the .components property on a SwiftUI Color object returns the four channels of its color value, red, green, blue, and opacity. Each value is a CGFloat from 0 to 1. They are accessed by name using dot syntax.
+
+```
+var components: (red: CGFloat, green: CGFloat, blue: CGFloat, opacity: CGFloat)
+```
+
+### _Color.hex_
+
+the .hex property on a SwiftUI Color object returns a string representing the hex value of the color.
+
+```
+var hex: String
+```
+
+## **_Date_**
+
+most of the extensions on the Date type are convenience functions to avoid repeating the same calculation when trying to work with a certain property in an app.
+
+### _getHoursFromStartOfDay_
+
+getHoursFromStartOfDay returns a double representing the hours and minutes passed since 12:00AM of a certain date. ie. 5:30AM -> 5.5
+
+```
+func getHoursFromStartOfDay() -> Double
+```
+
+### _getMinutesFromStartOfHour_
+
+getMinutesFromStartOfHour returns a double representing how many minutes have passed since the start of the current hour. ie. 5:30AM -> 30
+
+```
+func getMinutesFromStartOfHour() -> Double
+```
+
+### _getYearsSince_
+
+getYearsSince returns a double representing how many years have passed since a given date.
+
+```
+func getYearsSince( _ date: Date ) -> Double
+```
+
+### _resetToStartOfDay_
+
+resetToStartOfDay sets resets the time components of the date (hour, minutes, seconds) preserving only the calendar date.
+
+```
+func resetToStartOfDay() -> Date
+```
+
+### _matches_
+
+determines whether the date matches another date to a certain component. Smaller components require all large components to match for this function to return true.
+
+```
+func matches(_ secondDate: Date, to component: Calendar.Component) -> Bool
+```
+
+### _prioritizeComponent_
+
+erases all subcomponents in the date. For example passing the date 1/28/23, and prioritizing the month produces the date 1/00/23. This function only supports years, months, and days.
+
+```
+func prioritizeComponent( _ component: Calendar.Component ) -> Date
+```
+
+### _isFirstOfMonth_
+
+checks if the date is the first day of its month
+
+```
+func isFirstOfMonth() -> Bool
+```
+
+### _isSunday_
+
+checks if the date is a sunday
+
+```
+func isSunday() -> Bool
+```
+
+### _setMonth_
+
+sets the month value of the date without interrupting any of the other components. If the day is 31 and the month only supports 30 days, the day is automatically set to 00.
+
+```
+func setMonth(to month: Int) -> Date
+```
+
+### _setDay_
+
+sets the day value of the date without interrupting any of the other components.
+
+```
+func setDay(to day: Int) -> Date
+```
+
+## **_Extra_**
+
+### _Collection.countAll_
+
+counts the number of occurrences of a given element in a collection.
+
+```
+func countAll(where query: ( Self.Element ) -> Bool ) -> Int
+```
+
+### _Float.round & Double.rond_
+
+Rounds a Float or Double to the given number of decimal places.
+
+```
+func round(to digits: Int) -> Float
+func round(to digits: Int) -> Double
+```
+
+### _Int.formatIntoPhoneNumber_
+
+takes a given 10 digit Int and creates a string with conventional American phone number formatting. +x (xxx) xxx-xxxx
+
+### _String.removeFirst_
+
+removes the first occurrence of a character. If there are no instances of that char in the string, it returns the original string.
+
+```
+func removeFirst( of char: Character ) -> String
+```
+
+### _String.removeNonNumbers_
+
+removes all characters that are not numbers.
+
+```
+func removeNonNumbers() -> String
+```

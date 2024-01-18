@@ -10,9 +10,9 @@ This README will act as the documentation for the package. You can search for sp
 
 ## **viewModifiers**
 
-## **Styled ViewModifiers**
-
 These are a collection of custom viewModifiers, some aesthetic and some utilitarian. All are extensions of the View struct in SwiftUI, and can be invoked with dot syntax.
+
+## **Styled ViewModifiers**
 
 ### **_rectangularBackgrounds_**
 
@@ -225,7 +225,134 @@ UniversalStyle is an enum representing the four core styles provided by UIUniver
 - `case .secondary` associated with the secondary colors of the app
 - `case .transparent` not associated with any colors, makes materials .ultraThinMaterial
 
----
+## **UIUniversals**
+
+### **_UniversalText_**
+
+`public struct UniversalText: View`
+
+UniversalText is a super charged type of SwiftUI Text. By Default it accepts rigid sizing and custom fonts, but boasts a number of other sizing, scaling, and position features. All basic text viewModifiers such as .foregroundStyle, or .rotationEffect still work on it. It is recommended that any project adopting UIUniversal use UniversalText for all instances of text.
+
+```
+public init(_ text: String,
+                size: CGFloat,
+                font: UniversalFont = FontProvider[.madeTommyRegular],
+                case textCase: Text.Case? = nil,
+                wrap: Bool = true,
+                fixed: Bool = false,
+                scale: Bool = false,
+                textAlignment: TextAlignment = .leading,
+                lineSpacing: CGFloat = 0.5,
+                compensateForEmptySpace: Bool = true
+    )
+```
+
+- `text` the string to display
+- `size` the pointSize for the text. It is recommended to use one of the defaults provided in Constants. If these do not fit your font correctly, create better constants and use those. Using predefined constants maintains consistency and editability
+- `font` specifies the font for the text. This is an instance of UniversalFont, so any of the default fonts provided by UIUniversal will work. Custom font structs that conform to the UniversalFont protocol can also be passed in here.
+- `case` the case translation of the text. If nil, no case translation is applied.
+- `wrap` specifies whether the text should wrap when out of space. Defaults to true
+- `scale` specifies whether the text should scale when out of space. Defaults to false
+- `textAlignment` specifies how to align multi-line text.
+- `lineSpacing` specifies custom line spacing for multi-line text. Any value > 0 will automatically create new lines of text when needed. For values < 0, you will need to manually specify line breaks with \n in the text arg. ie. hello \nworld.
+- `compensateForEmptySpace` when set to false, it leaves the padding at the bottom associated with negative line spacing.
+
+### **_ResizableIcon_**
+
+`public struct ResizableIcon: View`
+
+ResizableIcon creates an SFSymbol icon at the desired size. It is recommended to be used in combination with UniversalText of the same size. For similar reasons, it is recommended you use one of the default sizes provided in Constants for consistent sizing with other icons and UniversalText.
+
+```
+public init( _ icon: String, size: CGFloat )
+```
+
+- `icon` the name of the SFSymbol
+- `size` the size of the icon
+
+### **_AsyncLoader_**
+
+`public struct AsyncLoader<Content>: View where Content: View`
+
+AsyncLoader runs a batch of async code, and waits on its completion before loading a view. It is useful if a view depends on certain information to be fetched before it can properly display its content. While it is waiting, asyncLoader displays a progress view. It is not recommended to put a full page in an AsyncLoader as it may lead to an unresponsive feeling app. Instead only wrap individual components in the loader.
+
+```
+public init( block: @escaping () async -> Void, @ViewBuilder content: @escaping () -> Content )
+```
+
+- `block` the async work that needs to be executed before the view can present
+- `content` the view that is waiting to be displayed.
+
+### **_WrappedHStack_**
+
+`public struct WrappedHStack<Content: View, Object: Identifiable>: View where Object: Equatable`
+
+WrappedHStack is a container that holds variably sized items in a grid format. Instead of having equal spacing that is either filled up by content or white space, WrappedHStack arranges items horizontally until it reaches the edge of the screen, where it then creates a new line of content.
+
+```
+public  init( collection: [Object],
+            spacing: CGFloat = 10,
+            @ViewBuilder content: @escaping (Object) -> Content )
+```
+
+- `collection` the collection of objects you want to display in the WrappedHStack
+- `spacing` the spacing around each piece of content. This will be applied bother horizontally and vertically.
+- `content` a function that passes in a specific object of the collection and creates a view from it. These are the components that will be displayed in the WrappedHStack
+
+### **_Divider_**
+
+`public struct Divider: View`
+
+Divider creates a horizontal or vertical line that fills all the available space to divide pieces of content.
+
+```
+ public init(vertical: Bool = false, strokeWidth: CGFloat = 1, color: Color = .black)
+```
+
+- `vertical` specifies whether the divider should be vertical or not. Defaults to false
+- `strokeWidth` specifies the thickness of the line. Defaults to 1
+- `color` specifies the color of the divider. Defaults to black
+
+### **_ScrollReader_**
+
+`public struct ScrollReader<C: View>: View`
+
+ScrollReader wraps around vertically aligned content, puts them into a scrollView, and reads back the position of the scroll to a CGPoint.
+
+```
+public init( _ position: Binding<CGPoint>, contentBuilder: () -> C )
+```
+
+- `position` the CGPoint you want the scrollView reader to write to
+- `contentBuilder` the content that should be put in the scrollView
+
+### **_BlurScroll_**
+
+`public struct BlurScroll<C: View>: View`
+
+BlurScroll wraps around vertically aligned content, puts them into a scrollView, and applies a fixed blur at the bottom of the screen. This gives the effect that the content is scrolling into or out of the blur depending on the direction. The Blur effect ignores safe Areas.
+
+```
+public init(_ blur: CGFloat, blurHeight: CGFloat = 0.25, scrollPositionBinding: Binding<CGPoint>? = nil, contentBuilder: () -> C)
+```
+
+- `blur` the intensity of the blur effect
+- `blurHeight` the percentage of the screen that should be consumed by the blur effect
+- `scrollPositionBinding` if you also need to read the scrollPosition from this ScrollView, you can pass in a CGPoint binding to get that value. Wrapping this struct in a ScrollReader will break the scroll gesture.
+- `contentBuilder` the content you want to put into the BlurScroll
+
+### **_RotatedLayout_**
+
+`public struct RotatedLayout: Layout`
+
+RotatedLayout rotates the frame of a given view by a specified angle. This is useful if you want to more closely match the frame of a view with a `.rotationEffect`. In plain SwiftUI, a `.rotationEffect` does not change the frame at all, creating a mismatch between what is seen on screen and what is handled in layouting.
+
+```
+public init( at angle: Double, scale: Double = 1 )
+```
+
+- `angle` the angle to rotate the frame. Measured in Radians
+- `scale` the scale of the frame. If the rotated frame still does not closely match the apparent frame of the view, you can scale the frame down to get the intended layouting behavior.
 
 ## **Constants**
 

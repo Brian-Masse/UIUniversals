@@ -87,6 +87,7 @@ private struct TestView: View {
 
 
 //MARK: UniversalText
+///UniversalText is a super charged type of SwiftUI Text. By Default it accepts rigid sizing and custom fonts, but boasts a number of other sizing, scaling, and position features. All basic text viewModifiers such as .foregroundStyle, or .rotationEffect still work on it. It is recommended that any project adopting UIUniversal use UniversalText for all instances of text.
 @available(iOS 15.0, *)
 public struct UniversalText: View {
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
@@ -173,8 +174,9 @@ public struct UniversalText: View {
 }
 
 //MARK: ResizeableIcon
+///ResizableIcon creates an SFSymbol icon at the desired size. It is recommended to be used in combination with UniversalText of the same size. For similar reasons, it is recommended you use one of the default sizes provided in Constants for consistent sizing with other icons and UniversalText.
 @available(iOS 15.0, *)
-public struct ResizeableIcon: View {
+public struct ResizableIcon: View {
     let icon: String
     let size: CGFloat
     
@@ -192,6 +194,7 @@ public struct ResizeableIcon: View {
 }
 
 //MARK: AsyncLoader
+///AsyncLoader runs a batch of async code, and waits on its completion before loading a view. It is useful if a view depends on certain information to be fetched before it can properly display its content. While it is waiting, asyncLoader displays a progress view. It is not recommended to put a full page in an AsyncLoader as it may lead to an unresponsive feeling app. Instead only wrap individual components in the loader.
 @available(iOS 15.0, *)
 public struct AsyncLoader<Content>: View where Content: View {
     @Environment(\.scenePhase) private var scenePhase
@@ -223,6 +226,7 @@ public struct AsyncLoader<Content>: View where Content: View {
 }
 
 //MARK: Wrapped HStack
+///WrappedHStack is a container that holds variably sized items in a grid format. Instead of having equal spacing that is either filled up by content or white space,  WrappedHStack arranges items horizontally until it reaches the edge of the screen, where it then creates a new line of content.
 @available(iOS 15.0, *)
 public struct WrappedHStack<Content: View, Object: Identifiable>: View where Object: Equatable {
     
@@ -312,6 +316,7 @@ struct SizePreferenceKey: PreferenceKey {
 }
 
 //MARK: Divider
+///Divider creates a horizontal or vertical line that fills all the available space to divide pieces of content.
 @available(iOS 15.0, *)
 public struct Divider: View {
     
@@ -334,7 +339,6 @@ public struct Divider: View {
 }
 
 //MARK: ScrollReader
-
 private struct SrollReaderPreferenceKey: PreferenceKey {
     
     static var defaultValue: CGPoint = .zero
@@ -342,7 +346,7 @@ private struct SrollReaderPreferenceKey: PreferenceKey {
     static func reduce(value: inout CGPoint, nextValue: () -> CGPoint) { }
 }
 
-
+///ScrollReader wraps around vertically aligned content, puts them into a scrollView, and reads back the position of the scroll to a CGPoint.
 @available(iOS 15.0, *)
 public struct ScrollReader<C: View>: View {
     
@@ -372,7 +376,7 @@ public struct ScrollReader<C: View>: View {
     }
 }
 
-//MARK: Blur Scroll
+//MARK: BlurScroll
 private struct ScrollOffsetPreferenceKey: PreferenceKey {
     
     static var defaultValue: CGPoint = .zero
@@ -380,6 +384,8 @@ private struct ScrollOffsetPreferenceKey: PreferenceKey {
     static func reduce(value: inout CGPoint, nextValue: () -> CGPoint) { }
 }
 
+
+///BlurScroll wraps around vertically aligned content, puts them into a scrollView, and applies a fixed blur at the bottom of the screen. This gives the effect that the content is scrolling into or out of the blur depending on the direction. The Blur effect ignores safe Areas.
 @available(iOS 15.0, *)
 public struct BlurScroll<C: View>: View {
     
@@ -490,6 +496,7 @@ struct VerticalLayout: Layout {
     }
 }
 
+///RotatedLayout rotates the frame of a given view by a specified angle. This is useful if you want to more closely match the frame of a view with a `.rotationEffect`. In plain SwiftUI, a `.rotationEffect` does not change the frame at all, creating a mismatch between what is seen on screen and what is handled in layouting.
 @available(iOS 16.0, *)
 public struct RotatedLayout: Layout {
     //    radians

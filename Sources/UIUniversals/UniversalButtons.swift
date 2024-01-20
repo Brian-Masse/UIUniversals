@@ -8,38 +8,9 @@
 import Foundation
 import SwiftUI
 
-@available(iOS 16.0, *)
-struct TestingView: View {
-    
-    @State var toggle: Bool = false
-    
-    init() {
-        FontProvider.registerFonts()
-        
-    }
-    
-    var body: some View {
-        VStack {
-            UniversalText("Hello world!", size: Constants.UISubHeaderTextSize, font: FontProvider[.renoMono])
-                .rectangularBackground(style: .primary,
-                                       stroke: true,
-                                       strokeWidth: 5,
-                                       cornerRadius: 20,
-                                       corners: [.topRight, .bottomLeft])
-
-        }
-        
-    }
-}
-
-@available(iOS 16.0, *)
-#Preview {
-    TestingView()
-}
-
 //MARK: UniversalButton
 @available(iOS 16.0, *)
-private struct UniversalButton<C: View>: View {
+public struct UniversalButton<C: View>: View {
     
     let label: C
     let action: () -> Void
@@ -61,13 +32,13 @@ private struct UniversalButton<C: View>: View {
         }
     }
     
-    init( shouldAnimate: Bool = true, labelBuilder: () -> C, action: @escaping () -> Void) {
+    public init( shouldAnimate: Bool = true, labelBuilder: () -> C, action: @escaping () -> Void) {
         self.label = labelBuilder()
         self.action = action
         self.animate = shouldAnimate
     }
     
-    var body: some View {
+    public var body: some View {
         Button { withAnimation {
             action()
         } } label: { label }

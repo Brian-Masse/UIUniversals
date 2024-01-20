@@ -281,7 +281,6 @@ public struct LargeRoundedButton: View {
             }
             .padding(.vertical, small ? 7: 25 )
             .padding(.horizontal, small ? 25 : 25)
-            .foregroundColor(.black)
             .universalStyledBackgrond(style, color: color)
             .cornerRadius(Constants.UIDefaultCornerRadius)
             .animation(.default, value: completed() )

@@ -259,7 +259,7 @@ public class Constants {
     
 //    extra
 //    These are various additional constants.
-    public static let UIDefaultCornerRadius: CGFloat = 40
+    public static var UIDefaultCornerRadius: CGFloat = 40
     public static let UIBottomOfPagePadding: CGFloat = 130
     
 //    fonts

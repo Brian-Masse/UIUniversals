@@ -120,10 +120,10 @@ public class Colors {
         let blue: CGFloat
         let green: CGFloat
         
-        public init( _ red: CGFloat, _ blue: CGFloat, _ green: CGFloat) {
+        public init( _ red: CGFloat, _ green: CGFloat, _ blue: CGFloat) {
             self.red = red
-            self.blue = blue
             self.green = green
+            self.blue = blue
         }
         
         public func convert() -> Color {

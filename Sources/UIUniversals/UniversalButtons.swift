@@ -220,7 +220,7 @@ public struct LargeTextButton: View {
 //MARK: LargeRoundedButton
 ///The LargeRoundedButton is a simple, pill shaped button that contains text and an SFSymbol icon. It also supports two states, a toggle on and a toggle off, which can display different labels / icons. To see examples check out [this repo](https://github.com/Brian-Masse/UIUniversalsExample)
 @available(iOS 16.0, *)
-public struct LargeRoundedButton: View {
+public struct LargeRoundedButton<C: View>: View {
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -238,6 +238,8 @@ public struct LargeRoundedButton: View {
     let color: Color?
     let style: UniversalStyle
     
+    let customLabel: C?
+    
     @State var tempCompletion: Bool = false
     
     public init( _ label: String, to completedLabel: String = "",
@@ -246,19 +248,24 @@ public struct LargeRoundedButton: View {
                  small: Bool = false,
                  color: Color? = nil,
                  style: UniversalStyle = .accent,
+                 labelBuilder: ((String) -> C)? = nil,
                  completed: @escaping () -> Bool = {false},
                  action: @escaping () -> Void ) {
+        
         self.label = label
         self.completedLabel = completedLabel
         self.icon = icon
         self.completedIcon = completedIcon
+        
         self.completed = completed
         self.action = action
+        
         self.wide = wide
         self.small = small
+        
         self.color = color
         self.style = style
-        
+        self.customLabel = labelBuilder?(label) ?? nil
     }
     
     public var body: some View {
@@ -269,9 +276,15 @@ public struct LargeRoundedButton: View {
             HStack {
                 if wide { Spacer() }
                 if label != "" {
-                    UniversalText(label, size: Constants.UISubHeaderTextSize, font: FontProvider[.syneHeavy])
-                        .minimumScaleFactor(0.7)
-                        .lineLimit(1)
+                    ZStack {
+                        if customLabel != nil {
+                            customLabel
+                        } else {
+                            UniversalText(label, size: Constants.UISubHeaderTextSize, font: FontProvider[.syneHeavy])
+                        }
+                    }
+                    .minimumScaleFactor(0.7)
+                    .lineLimit(1)
                 }
                 
                 if completedIcon != "" {

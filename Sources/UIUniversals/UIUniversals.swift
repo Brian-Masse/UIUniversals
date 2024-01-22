@@ -133,7 +133,6 @@ public struct UniversalText: View {
     
     @ViewBuilder
     private func makeText(_ text: String) -> some View {
-        
         Text(text)
             .dynamicTypeSize( ...DynamicTypeSize.accessibility1 )
             .lineSpacing(lineSpacing)

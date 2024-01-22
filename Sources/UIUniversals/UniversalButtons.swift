@@ -220,7 +220,7 @@ public struct LargeTextButton: View {
 //MARK: LargeRoundedButton
 ///The LargeRoundedButton is a simple, pill shaped button that contains text and an SFSymbol icon. It also supports two states, a toggle on and a toggle off, which can display different labels / icons. To see examples check out [this repo](https://github.com/Brian-Masse/UIUniversalsExample)
 @available(iOS 16.0, *)
-public struct LargeRoundedButton<C: View>: View {
+public struct LargeRoundedButton<Content: View>: View {
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -238,9 +238,14 @@ public struct LargeRoundedButton<C: View>: View {
     let color: Color?
     let style: UniversalStyle
     
-    let customLabel: C?
-    
     @State var tempCompletion: Bool = false
+    
+    @ViewBuilder var contentLabel: (String) -> Content
+    
+    @ViewBuilder
+    public static func defaultContentLabel( _ label: String ) -> Content {
+        UniversalText(label, size: Constants.UISubHeaderTextSize, font: FontProvider[.syneHeavy]) as! Content
+    }
     
     public init( _ label: String, to completedLabel: String = "",
                  icon: String, to completedIcon: String = "",
@@ -248,7 +253,7 @@ public struct LargeRoundedButton<C: View>: View {
                  small: Bool = false,
                  color: Color? = nil,
                  style: UniversalStyle = .accent,
-                 labelBuilder: ((String) -> C)? = nil,
+                 @ViewBuilder labelBuilder: (String) -> Content = LargeRoundedButton.defaultContentLabel,
                  completed: @escaping () -> Bool = {false},
                  action: @escaping () -> Void ) {
         
@@ -265,7 +270,8 @@ public struct LargeRoundedButton<C: View>: View {
         
         self.color = color
         self.style = style
-        self.customLabel = labelBuilder?(label) ?? nil
+        
+        self.contentLabel = LargeRoundedButton.defaultContentLabel
     }
     
     public var body: some View {
@@ -276,15 +282,9 @@ public struct LargeRoundedButton<C: View>: View {
             HStack {
                 if wide { Spacer() }
                 if label != "" {
-                    ZStack {
-                        if customLabel != nil {
-                            customLabel
-                        } else {
-                            UniversalText(label, size: Constants.UISubHeaderTextSize, font: FontProvider[.syneHeavy])
-                        }
-                    }
-                    .minimumScaleFactor(0.7)
-                    .lineLimit(1)
+                    contentLabel( label )
+                        .minimumScaleFactor(0.7)
+                        .lineLimit(1)
                 }
                 
                 if completedIcon != "" {

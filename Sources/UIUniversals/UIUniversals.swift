@@ -61,7 +61,7 @@ private struct TestView: View {
                 )
                 .padding(.bottom)
                 
-                Divider()
+                Divider() 
                 
                 WrappedHStack(collection: data, spacing: 5) { obj in
                     UniversalText( obj.data, size: Constants.UIDefaultTextSize, font: FontProvider[.renoMono] )

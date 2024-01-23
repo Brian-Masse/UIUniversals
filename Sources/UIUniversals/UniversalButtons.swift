@@ -220,7 +220,7 @@ public struct LargeTextButton: View {
 //MARK: LargeRoundedButton
 ///The LargeRoundedButton is a simple, pill shaped button that contains text and an SFSymbol icon. It also supports two states, a toggle on and a toggle off, which can display different labels / icons. To see examples check out [this repo](https://github.com/Brian-Masse/UIUniversalsExample)
 @available(iOS 16.0, *)
-public struct LargeRoundedButton<Content: View>: View {
+public struct LargeRoundedButton: View {
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -239,13 +239,13 @@ public struct LargeRoundedButton<Content: View>: View {
     let style: UniversalStyle
     
     @State var tempCompletion: Bool = false
-    
-    @ViewBuilder var contentLabel: (String) -> Content
-    
-    @ViewBuilder
-    public static func defaultContentLabel( _ label: String ) -> Content {
-        UniversalText(label, size: Constants.UISubHeaderTextSize, font: FontProvider[.syneHeavy]) as! Content
-    }
+//    
+//    @ViewBuilder var contentLabel: (String) -> Content
+//    
+//    @ViewBuilder
+//    public static func defaultContentLabel( _ label: String ) -> Content {
+//        UniversalText(label, size: Constants.UISubHeaderTextSize, font: FontProvider[.syneHeavy]) as! Content
+//    }
     
     public init( _ label: String, to completedLabel: String = "",
                  icon: String, to completedIcon: String = "",
@@ -253,7 +253,7 @@ public struct LargeRoundedButton<Content: View>: View {
                  small: Bool = false,
                  color: Color? = nil,
                  style: UniversalStyle = .accent,
-                 @ViewBuilder labelBuilder: (String) -> Content = LargeRoundedButton.defaultContentLabel,
+//                 @ViewBuilder labelBuilder: @escaping (String) -> Content = LargeRoundedButton.defaultContentLabel,
                  completed: @escaping () -> Bool = {false},
                  action: @escaping () -> Void ) {
         
@@ -271,7 +271,7 @@ public struct LargeRoundedButton<Content: View>: View {
         self.color = color
         self.style = style
         
-        self.contentLabel = LargeRoundedButton.defaultContentLabel
+//        self.contentLabel = labelBuilder
     }
     
     public var body: some View {
@@ -282,7 +282,7 @@ public struct LargeRoundedButton<Content: View>: View {
             HStack {
                 if wide { Spacer() }
                 if label != "" {
-                    contentLabel( label )
+                    UniversalText(label, size: Constants.UISubHeaderTextSize, font: FontProvider[.syneHeavy])
                         .minimumScaleFactor(0.7)
                         .lineLimit(1)
                 }

@@ -71,7 +71,7 @@ private struct UniversalImageBackground: ViewModifier {
                         .ignoresSafeArea()
                     
                     Colors.getSecondaryBase(from: colorScheme)
-                        .opacity(0.55)
+                        .opacity( colorScheme == .light ? 0.55 : 0.85)
                         .ignoresSafeArea()
                 }
             }

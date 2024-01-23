@@ -288,7 +288,7 @@ public class Constants {
         Constants.UIMainHeaderTextSize = UIMainHeaderTextSize ?? Constants.UIMainHeaderTextSize
         Constants.UIHeaderTextSize = UIHeaderTextSize ?? Constants.UIHeaderTextSize
         Constants.UISubHeaderTextSize = UISubHeaderTextSize ?? Constants.UISubHeaderTextSize
-        Constants.UIDefaultTextSize = UIDefaultTextSize ?? Constants.UIDefaultTextSize
+        Constants.UIDefaultTextSize = UIDefeaultTextSize ?? Constants.UIDefaultTextSize
         Constants.UISmallTextSize = UISmallTextSize ?? Constants.UISmallTextSize
         
     }

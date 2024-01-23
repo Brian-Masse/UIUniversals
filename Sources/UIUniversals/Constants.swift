@@ -284,12 +284,12 @@ public class Constants {
                                      UISmallTextSize: CGFloat? = nil) {
         
         Constants.UILargeTextSize = UILargeTextSize ?? Constants.UILargeTextSize
-        Constants.UITitleTextSize = UILargeTextSize ?? Constants.UITitleTextSize
-        Constants.UIMainHeaderTextSize = UILargeTextSize ?? Constants.UIMainHeaderTextSize
-        Constants.UIHeaderTextSize = UILargeTextSize ?? Constants.UIHeaderTextSize
-        Constants.UISubHeaderTextSize = UILargeTextSize ?? Constants.UISubHeaderTextSize
-        Constants.UIDefaultTextSize = UILargeTextSize ?? Constants.UIDefaultTextSize
-        Constants.UISmallTextSize = UILargeTextSize ?? Constants.UISmallTextSize
+        Constants.UITitleTextSize = UITitleTextSize ?? Constants.UITitleTextSize
+        Constants.UIMainHeaderTextSize = UIMainHeaderTextSize ?? Constants.UIMainHeaderTextSize
+        Constants.UIHeaderTextSize = UIHeaderTextSize ?? Constants.UIHeaderTextSize
+        Constants.UISubHeaderTextSize = UISubHeaderTextSize ?? Constants.UISubHeaderTextSize
+        Constants.UIDefaultTextSize = UIDefaultTextSize ?? Constants.UIDefaultTextSize
+        Constants.UISmallTextSize = UISmallTextSize ?? Constants.UISmallTextSize
         
     }
     

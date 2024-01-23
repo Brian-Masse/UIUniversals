@@ -8,38 +8,9 @@
 import Foundation
 import SwiftUI
 
-@available(iOS 16.0, *)
-struct TestingView: View {
-    
-    @State var toggle: Bool = false
-    
-    init() {
-        FontProvider.registerFonts()
-        
-    }
-    
-    var body: some View {
-        VStack {
-            UniversalText("Hello world!", size: Constants.UISubHeaderTextSize, font: FontProvider[.renoMono])
-                .rectangularBackground(style: .primary,
-                                       stroke: true,
-                                       strokeWidth: 5,
-                                       cornerRadius: 20,
-                                       corners: [.topRight, .bottomLeft])
-
-        }
-        
-    }
-}
-
-@available(iOS 16.0, *)
-#Preview {
-    TestingView()
-}
-
 //MARK: UniversalButton
 @available(iOS 16.0, *)
-private struct UniversalButton<C: View>: View {
+public struct UniversalButton<C: View>: View {
     
     let label: C
     let action: () -> Void
@@ -61,13 +32,13 @@ private struct UniversalButton<C: View>: View {
         }
     }
     
-    init( shouldAnimate: Bool = true, labelBuilder: () -> C, action: @escaping () -> Void) {
+    public init( shouldAnimate: Bool = true, labelBuilder: () -> C, action: @escaping () -> Void) {
         self.label = labelBuilder()
         self.action = action
         self.animate = shouldAnimate
     }
     
-    var body: some View {
+    public var body: some View {
         Button { withAnimation {
             action()
         } } label: { label }
@@ -268,6 +239,13 @@ public struct LargeRoundedButton: View {
     let style: UniversalStyle
     
     @State var tempCompletion: Bool = false
+//    
+//    @ViewBuilder var contentLabel: (String) -> Content
+//    
+//    @ViewBuilder
+//    public static func defaultContentLabel( _ label: String ) -> Content {
+//        UniversalText(label, size: Constants.UISubHeaderTextSize, font: FontProvider[.syneHeavy]) as! Content
+//    }
     
     public init( _ label: String, to completedLabel: String = "",
                  icon: String, to completedIcon: String = "",
@@ -275,19 +253,25 @@ public struct LargeRoundedButton: View {
                  small: Bool = false,
                  color: Color? = nil,
                  style: UniversalStyle = .accent,
+//                 @ViewBuilder labelBuilder: @escaping (String) -> Content = LargeRoundedButton.defaultContentLabel,
                  completed: @escaping () -> Bool = {false},
                  action: @escaping () -> Void ) {
+        
         self.label = label
         self.completedLabel = completedLabel
         self.icon = icon
         self.completedIcon = completedIcon
+        
         self.completed = completed
         self.action = action
+        
         self.wide = wide
         self.small = small
+        
         self.color = color
         self.style = style
         
+//        self.contentLabel = labelBuilder
     }
     
     public var body: some View {
@@ -310,7 +294,6 @@ public struct LargeRoundedButton: View {
             }
             .padding(.vertical, small ? 7: 25 )
             .padding(.horizontal, small ? 25 : 25)
-            .foregroundColor(.black)
             .universalStyledBackgrond(style, color: color)
             .cornerRadius(Constants.UIDefaultCornerRadius)
             .animation(.default, value: completed() )

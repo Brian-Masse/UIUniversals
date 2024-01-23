@@ -120,10 +120,10 @@ public class Colors {
         let blue: CGFloat
         let green: CGFloat
         
-        public init( _ red: CGFloat, _ blue: CGFloat, green: CGFloat) {
+        public init( _ red: CGFloat, _ green: CGFloat, _ blue: CGFloat) {
             self.red = red
-            self.blue = blue
             self.green = green
+            self.blue = blue
         }
         
         public func convert() -> Color {
@@ -259,7 +259,7 @@ public class Constants {
     
 //    extra
 //    These are various additional constants.
-    public static let UIDefaultCornerRadius: CGFloat = 40
+    public static var UIDefaultCornerRadius: CGFloat = 40
     public static let UIBottomOfPagePadding: CGFloat = 130
     
 //    fonts

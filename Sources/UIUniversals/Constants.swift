@@ -241,13 +241,13 @@ public class Constants {
     
 //    font sizes
 //    These are standard fontSizes that work well with the fonts provided in UIUniversals. The variable name suggests their intended use. To see examples check out [this repo](https://github.com/Brian-Masse/UIUniversalsExample)
-    public static let UILargeTextSize: CGFloat     = 130
-    public static let UITitleTextSize: CGFloat     = 80
-    public static let UIMainHeaderTextSize: CGFloat    = 60
-    public static let UIHeaderTextSize: CGFloat    = 40
-    public static let UISubHeaderTextSize: CGFloat = 30
-    public static let UIDefaultTextSize: CGFloat   = 20
-    public static let UISmallTextSize: CGFloat     = 15
+    public static var UILargeTextSize: CGFloat     = 130
+    public static var UITitleTextSize: CGFloat     = 80
+    public static var UIMainHeaderTextSize: CGFloat    = 60
+    public static var UIHeaderTextSize: CGFloat    = 40
+    public static var UISubHeaderTextSize: CGFloat = 30
+    public static var UIDefaultTextSize: CGFloat   = 20
+    public static var UISmallTextSize: CGFloat     = 15
     
 //    timings
 //    These are numeric representations of various common time scales. Swift measures all its time in seconds, so adding these values to date objects will produce the expected result. ie. `some date += Constants.DayTime advances the date by a day`
@@ -273,6 +273,23 @@ public class Constants {
     public static func setDefaultFonts( mainFont: UniversalFont? = nil, titleFont: UniversalFont? = nil ) {
         Constants.titleFont = titleFont ?? Constants.titleFont
         Constants.mainFont = mainFont ?? Constants.mainFont
+    }
+    
+    public static func setFontSizes( UILargeTextSize: CGFloat? = nil,
+                                     UITitleTextSize: CGFloat? = nil,
+                                     UIMainHeaderTextSize: CGFloat? = nil,
+                                     UIHeaderTextSize: CGFloat? = nil,
+                                     UISubHeaderTextSize: CGFloat? = nil,
+                                     UIDefeaultTextSize: CGFloat? = nil,
+                                     UISmallTextSize: CGFloat? = nil) {
+        
+        Constants.UILargeTextSize = UILargeTextSize ?? Constants.UILargeTextSize
+        Constants.UITitleTextSize = UILargeTextSize ?? Constants.UITitleTextSize
+        Constants.UIMainHeaderTextSize = UILargeTextSize ?? Constants.UIMainHeaderTextSize
+        Constants.UIHeaderTextSize = UILargeTextSize ?? Constants.UIHeaderTextSize
+        Constants.UISubHeaderTextSize = UILargeTextSize ?? Constants.UISubHeaderTextSize
+        Constants.UIDefaultTextSize = UILargeTextSize ?? Constants.UIDefaultTextSize
+        Constants.UISmallTextSize = UILargeTextSize ?? Constants.UISmallTextSize
         
     }
     

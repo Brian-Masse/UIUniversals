@@ -236,6 +236,7 @@ public struct LargeRoundedButton: View {
     let wide: Bool
     
     let color: Color?
+    let foregroundColor: Color?
     let style: UniversalStyle
     
     @State var tempCompletion: Bool = false
@@ -252,6 +253,7 @@ public struct LargeRoundedButton: View {
                  wide: Bool = false,
                  small: Bool = false,
                  color: Color? = nil,
+                 foregroundColor: Color? = .black,
                  style: UniversalStyle = .accent,
 //                 @ViewBuilder labelBuilder: @escaping (String) -> Content = LargeRoundedButton.defaultContentLabel,
                  completed: @escaping () -> Bool = {false},
@@ -268,6 +270,7 @@ public struct LargeRoundedButton: View {
         self.wide = wide
         self.small = small
         
+        self.foregroundColor = foregroundColor
         self.color = color
         self.style = style
         
@@ -294,6 +297,7 @@ public struct LargeRoundedButton: View {
             }
             .padding(.vertical, small ? 7: 25 )
             .padding(.horizontal, small ? 25 : 25)
+            .if(foregroundColor != nil) { view in view.foregroundStyle(foregroundColor!)}
             .universalStyledBackgrond(style, color: color)
             .cornerRadius(Constants.UIDefaultCornerRadius)
             .animation(.default, value: completed() )

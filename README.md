@@ -27,7 +27,7 @@ This README will act as the documentation for the package. You can search for sp
 
 - ### UniversalButtons
 
-  - This section is a collection of customizable, highly stylized buttons
+  - This section is a collection of customizable, highly stylized buttons 
 
 - ### Constants
 

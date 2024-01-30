@@ -145,6 +145,7 @@ private struct RectangularBackground: ViewModifier {
     let padding: CGFloat?
     let cornerRadius: CGFloat
     var corners: UIRectCorner
+    let foregroundColor: Color?
     let stroke: Bool
     let strokeWidth: CGFloat
     let texture: Bool
@@ -166,6 +167,7 @@ private struct RectangularBackground: ViewModifier {
                     }
                 }
             )
+            .if( foregroundColor != nil ) { view in view.foregroundStyle(foregroundColor!)}
             .universalStyledBackgrond(style)
             .if(stroke) { view in
                 view
@@ -190,6 +192,7 @@ public extension View {
     ///rectangularBackground applies a stylized background to any view it is attached to. By default it contains padding, rounded corners, and uses the .primary UniversalStyle.
     func rectangularBackground(_ padding: CGFloat? = nil,
                                style: UniversalStyle = .primary,
+                               foregroundColor: Color? = nil,
                                stroke: Bool = false,
                                strokeWidth: CGFloat = 1,
                                cornerRadius: CGFloat = Constants.UIDefaultCornerRadius,
@@ -201,6 +204,7 @@ public extension View {
                                        padding: padding,
                                        cornerRadius: cornerRadius,
                                        corners: corners,
+                                       foregroundColor: foregroundColor,
                                        stroke: stroke,
                                        strokeWidth: strokeWidth,
                                        texture: texture,

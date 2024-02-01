@@ -153,7 +153,7 @@ public extension Date {
 }
 
 //MARK: Collection
-extension Collection {
+public extension Collection {
     ///counts the number of occurrences of a given element in a collection.
     func countAll(where query: ( Self.Element ) -> Bool ) -> Int {
         self.filter(query).count

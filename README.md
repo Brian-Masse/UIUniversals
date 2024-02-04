@@ -27,7 +27,7 @@ This README will act as the documentation for the package. You can search for sp
 
 - ### UniversalButtons
 
-  - This section is a collection of customizable, highly stylized buttons 
+  - This section is a collection of customizable, highly stylized buttons
 
 - ### Constants
 
@@ -56,6 +56,7 @@ rectangularBackground applies a stylized background to any view it is attached t
 ```
 init( _ padding: CGFloat? = nil,
     style: UniversalStyle = .primary,
+    foregroundColor: Color? = nil,
     stroke: Bool = false,
     strokeWidth: CGFloat = 1,
     cornerRadius: CGFloat = Constants.UIDefaultCornerRadius,
@@ -66,6 +67,7 @@ init( _ padding: CGFloat? = nil,
 
 - `padding` adds the specified padding to the content before applying the rectangular background. Defaults to nil, which uses Apple's defaults .padding() modifier.
 - `style` specifies which UniversalStyle to apply to the background. Defaults to .primary
+- `foregroundColor` specifies a static foregroundStyle to apply to the content of the modifier. Defaults to nil. When nil, the foregroundStyle dynamically changes based on the iOS system theme.
 - `stroke` specifies whether or not add a stroke to the background. Defaults to false
 - `strokeWidth` specifies the width, in pixels, of the stroke. Defaults to 1.
 - `cornerRadius`specifies the cornerRadius of the background. Defaults to the default cornerRadius stored in Constants
@@ -436,6 +438,7 @@ public init( _ label: String, to completedLabel: String = "",
                  wide: Bool = false,
                  small: Bool = false,
                  color: Color? = nil,
+                 foregroundColor: Color? = .black,
                  style: UniversalStyle = .accent,
                  completed: @escaping () -> Bool = {false},
                  action: @escaping () -> Void )
@@ -448,6 +451,7 @@ public init( _ label: String, to completedLabel: String = "",
 - `wide` specifies wether the button fills all available horizontal space. Defaults to false
 - `small` specifies wether the button do not have vertical padding around its labels. Defaults to false
 - `color` specifies the color of the button background. If a value is provided, it overrides the style arg. Defaults to nil.
+- `foregroundColor` species a fixed foregroundStyle for the button. Defaults to .black. Set to nil, the color dynamically changes with the iOS system theme.
 - `style` specifies the style of the button background. Defaults to UniversalStyle.primary
 - `completed` is a computed boolean describing wether the button is in a toggled or untoggled state. Left blank, the button will always be untoggled.
 - `action` the action of the button

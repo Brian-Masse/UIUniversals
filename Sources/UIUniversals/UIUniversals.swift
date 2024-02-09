@@ -4,95 +4,10 @@
 import Foundation
 import SwiftUI
 
-@available(iOS 16.0, *)
-private struct TestView: View {
-    
-    struct TestData: Identifiable, Equatable {
-        var data: String = ""
-        let uuid: UUID = UUID()
-        
-        var id: UUID {
-            self.uuid
-        }
-        
-        init() {
-            let random = Int.random(in: 0...6)
-            for _ in 0...random {
-                data += "0"
-            }
-        }
-    }
-    
-    private func makeRandomData() -> [TestData] {
-        var list: [TestData] = []
-        for _ in 0...30 { list.append(TestData()) }
-        return list
-    }
-    
-    @State var scrollPoint: CGPoint = .zero
-    
-    var body: some View {
-        
-        let data = makeRandomData()
-        
-        ScrollReader($scrollPoint) {
-            VStack {
-                HStack {
-                    UniversalText( "Hello World!",
-                                   size: Constants.UISubHeaderTextSize,
-                                   font: FontProvider[.syneHeavy] )
-                    
-                    Image(systemName: "globe.americas")
-                    
-                    
-                    Spacer()
-                }
-                .rectangularBackground(style: .transparent, shadow: true)
-                .padding(.bottom)
-                
-                HStack {
-                    Text("manual RectangularBackground")
-                    Image(systemName: "globe.europe.africa")
-                }
-                .padding()
-                .background(
-                    Colors.secondaryLight
-                        .cornerRadius(50, corners: [ .topRight, .bottomLeft ])
-                )
-                .padding(.bottom)
-                
-                Divider() 
-                
-                WrappedHStack(collection: data, spacing: 5) { obj in
-                    UniversalText( obj.data, size: Constants.UIDefaultTextSize, font: FontProvider[.renoMono] )
-                        .rectangularBackground(7, style: .secondary, stroke: true)
-                }
-                
-                Divider()
-                
-                Spacer()
-                
-                UniversalText( "\(scrollPoint.y)", size: Constants.UIDefaultTextSize, font: FontProvider[.renoMono] )
-            }
-            .padding()
-        }
-        .universalTextStyle(reversed: false)
-        .universalImageBackground( universalImage("test") )
-    }
-}
-
-@available(iOS 16.0, *)
-#Preview {
-    TestView()
-}
-
-
 //MARK: UniversalText
 ///UniversalText is a super charged type of SwiftUI Text. By Default it accepts rigid sizing and custom fonts, but boasts a number of other sizing, scaling, and position features. All basic text viewModifiers such as .foregroundStyle, or .rotationEffect still work on it. It is recommended that any project adopting UIUniversal use UniversalText for all instances of text.
 @available(iOS 15.0, *)
 public struct UniversalText: View {
-    @Environment(\.dynamicTypeSize) var dynamicTypeSize
-    
     let text: String
     let size: CGFloat
     let font: String
@@ -134,12 +49,11 @@ public struct UniversalText: View {
     @ViewBuilder
     private func makeText(_ text: String) -> some View {
         Text(text)
-            .dynamicTypeSize( ...DynamicTypeSize.accessibility1 )
             .lineSpacing(lineSpacing)
             .minimumScaleFactor(scale ? 0.1 : 1)
             .lineLimit(wrap ? 30 : 1)
             .multilineTextAlignment(alignment)
-            .font( fixed ? Font.custom(font, fixedSize: size) : Font.custom(font, size: size) )
+            .font(Font.custom(font, size: size))
             .if( textCase != nil ) { view in view.textCase(textCase) }
         
     }

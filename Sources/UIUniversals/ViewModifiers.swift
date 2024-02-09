@@ -177,7 +177,8 @@ private struct RectangularBackground: ViewModifier {
                             .stroke(colorScheme == .dark ? .white : .black, lineWidth: strokeWidth)
                     )
             }
-            .cornerRadius(cornerRadius, corners: corners)
+            .if(corners == .allCorners) { view in view.cornerRadius(cornerRadius)}
+            .if(corners != .allCorners) { view in view.cornerRadius(cornerRadius, corners: corners)}
             .if(shadow) { view in
                 view
                     .shadow(color: .black.opacity(0.2),

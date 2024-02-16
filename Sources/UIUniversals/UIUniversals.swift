@@ -265,9 +265,10 @@ private struct SrollReaderPreferenceKey: PreferenceKey {
 public struct ScrollReader<C: View>: View {
     
     var positionBinding: Binding<CGPoint>
+    let showingIndicator: Bool = false
     let content: C
     
-    public init( _ position: Binding<CGPoint>, contentBuilder: () -> C ) {
+    public init( _ position: Binding<CGPoint>, showingIndicator: Bool, contentBuilder: () -> C ) {
         self.positionBinding = position
         self.content = contentBuilder()
     }
@@ -275,7 +276,7 @@ public struct ScrollReader<C: View>: View {
     let coordinateSpaceName = "scrollReader"
     
     public var body: some View {
-        ScrollView {
+        ScrollView(showsIndicators: showingIndicator) {
             content
                 .background( GeometryReader { geo in
                     Color.clear
@@ -305,6 +306,7 @@ public struct BlurScroll<C: View>: View {
     
     let blur: CGFloat
     let blurHeight: CGFloat
+    let showingIndicator: Bool
     
     let coordinateSpaceName = "scroll"
     
@@ -313,10 +315,11 @@ public struct BlurScroll<C: View>: View {
     var scrollPositionBinding: Binding<CGPoint>
     @State var scrollPosition: CGPoint = .zero
     
-    public init(_ blur: CGFloat, blurHeight: CGFloat = 0.25, scrollPositionBinding: Binding<CGPoint>? = nil, contentBuilder: () -> C) {
+    public init(_ blur: CGFloat, blurHeight: CGFloat = 0.25, showingIndicator: Bool = false, scrollPositionBinding: Binding<CGPoint>? = nil, contentBuilder: () -> C) {
         
         self.blur = blur
         self.blurHeight = blurHeight
+        self.showingIndicator = showingIndicator
         
         self.content = contentBuilder()
         self.scrollPositionBinding = Binding { .zero } set: { _ in }
@@ -350,7 +353,7 @@ public struct BlurScroll<C: View>: View {
         
         GeometryReader { topGeo in
             
-            ScrollReader(scrollPositionBinding) {
+            ScrollReader(scrollPositionBinding, showingIndicator: showingIndicator) {
             
                 ZStack(alignment: .top) {
                     content
@@ -373,7 +376,7 @@ public struct BlurScroll<C: View>: View {
                         )
                         .ignoresSafeArea()
                 }
-                .padding(.bottom, topGeo.size.height * 0.25)
+//                .padding(.bottom, topGeo.size.height * 0.25)
             }
         }
         .ignoresSafeArea()

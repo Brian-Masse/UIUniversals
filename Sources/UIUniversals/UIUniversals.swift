@@ -17,6 +17,7 @@ public struct UniversalText: View {
     let fixed: Bool
     let scale: Bool
     
+    let minimumScaleFactor: CGFloat
     let alignment: TextAlignment
     let lineSpacing: CGFloat
     let compensateForEmptySpace: Bool
@@ -28,6 +29,7 @@ public struct UniversalText: View {
                 wrap: Bool = true,
                 fixed: Bool = false,
                 scale: Bool = false,
+                minimumScaleFactor: CGFloat = 01,
                 textAlignment: TextAlignment = .leading,
                 lineSpacing: CGFloat = 0.5,
                 compensateForEmptySpace: Bool = true
@@ -41,6 +43,7 @@ public struct UniversalText: View {
         self.fixed = fixed
         self.scale = scale
         
+        self.minimumScaleFactor = minimumScaleFactor
         self.alignment = textAlignment
         self.lineSpacing = lineSpacing
         self.compensateForEmptySpace = compensateForEmptySpace
@@ -50,7 +53,7 @@ public struct UniversalText: View {
     private func makeText(_ text: String) -> some View {
         Text(text)
             .lineSpacing(lineSpacing)
-            .minimumScaleFactor(scale ? 0.1 : 1)
+            .minimumScaleFactor(scale ? self.minimumScaleFactor : 1)
             .lineLimit(wrap ? 30 : 1)
             .multilineTextAlignment(alignment)
             .font(Font.custom(font, size: size))

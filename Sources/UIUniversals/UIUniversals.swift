@@ -29,7 +29,7 @@ public struct UniversalText: View {
                 wrap: Bool = true,
                 fixed: Bool = false,
                 scale: Bool = false,
-                minimumScaleFactor: CGFloat = 01,
+                minimumScaleFactor: CGFloat = 0.1,
                 textAlignment: TextAlignment = .leading,
                 lineSpacing: CGFloat = 0.5,
                 compensateForEmptySpace: Bool = true

@@ -388,7 +388,7 @@ public struct BlurScroll<C: View>: View {
 
 //MARK: LoadingView
 @available(iOS 16.0, *)
-struct LoadingView: View {
+public struct LoadingView: View {
     
     @Environment( \.colorScheme ) var colorScheme
     
@@ -436,8 +436,12 @@ struct LoadingView: View {
         .scaleEffect(x: 0.9)
     }
     
+    public init(height: CGFloat) {
+        self.height = height
+    }
+    
 //    Body
-    var body: some View {
+    public var body: some View {
         HStack(alignment: .top) {
             UniversalText("Hello, this is a secret message",
                           size: Constants.UIDefaultTextSize, wrap: false)
@@ -479,11 +483,16 @@ struct LoadingView: View {
 
 //MARK: CollectionLoadingView
 @available(iOS 16.0, *)
-struct CollectionLoadingView: View {
+public struct CollectionLoadingView: View {
     let count: Int
     let height: CGFloat
     
-    var body: some View {
+    public init(count: Int, height: CGFloat) {
+        self.count = count
+        self.height = height
+    }
+    
+    public var body: some View {
         VStack {
             ForEach( 0..<count, id: \.self ) { _ in
                 LoadingView(height: height)

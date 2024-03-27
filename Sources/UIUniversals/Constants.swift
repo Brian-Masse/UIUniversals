@@ -30,41 +30,41 @@ public enum UniversalStyle: String, Identifiable {
 public class Colors {
     
     ///The getAccent function takes in an iOS ColorScheme and returns the corresponding accent color.
-    public static func getAccent(from colorScheme: ColorScheme) -> Color {
+    public static func getAccent(from colorScheme: ColorScheme, reversed: Bool = false) -> Color {
         switch colorScheme {
-        case .light: return Colors.lightAccent
-        case .dark: return Colors.darkAccent
+        case .light: return !reversed ? Colors.lightAccent : Colors.darkAccent
+        case .dark: return !reversed ? Colors.darkAccent : Colors.lightAccent
         @unknown default:
             return Colors.lightAccent
         }
     }
     
     ///The getBase function takes in an iOS ColorScheme and returns the corresponding base color.
-    public static func getBase(from colorScheme: ColorScheme) -> Color {
+    public static func getBase(from colorScheme: ColorScheme, reversed: Bool = false) -> Color {
         switch colorScheme {
-        case .light: return Colors.baseLight
-        case .dark: return Colors.baseDark
+        case .light: return !reversed ? Colors.baseLight : Colors.baseDark
+        case .dark: return !reversed ? Colors.baseDark : Colors.baseLight
         @unknown default:
             return Colors.baseDark
         }
     }
     
     ///The getSecondaryBase function takes in an iOS ColorScheme and returns the corresponding secondary color.
-    public static func getSecondaryBase(from colorScheme: ColorScheme) -> Color {
+    public static func getSecondaryBase(from colorScheme: ColorScheme, reversed: Bool = false) -> Color {
         switch colorScheme {
-        case .light: return Colors.secondaryLight
-        case .dark: return Colors.secondaryDark
+        case .light: return !reversed ? Colors.secondaryLight : Colors.secondaryDark
+        case .dark: return !reversed ? Colors.secondaryDark : Colors.secondaryLight
         @unknown default:
             return Colors.secondaryDark
         }
     }
     
     ///the getColor function takes in a style and an iOS ColorScheme and returns the corresponding color in the right color scheme. See `UniversalStyle` for more information on which styles are associated with which colors.
-    public static func getColor(from style: UniversalStyle, in colorScheme: ColorScheme) -> Color {
+    public static func getColor(from style: UniversalStyle, in colorScheme: ColorScheme, reversed: Bool = false) -> Color {
         switch style {
-        case .primary: return getBase(from: colorScheme)
-        case .secondary: return getSecondaryBase(from: colorScheme)
-        case .accent: return getAccent(from: colorScheme)
+        case .primary: return getBase(from: colorScheme, reversed: reversed)
+        case .secondary: return getSecondaryBase(from: colorScheme, reversed: reversed)
+        case .accent: return getAccent(from: colorScheme, reversed: reversed)
         default: return Colors.lightAccent
         }
     }

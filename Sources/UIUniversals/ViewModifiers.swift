@@ -150,6 +150,7 @@ private struct RectangularBackground: ViewModifier {
     let strokeWidth: CGFloat
     let texture: Bool
     let shadow: Bool
+    let reverseStyle: Bool
 
     func body(content: Content) -> some View {
         content
@@ -168,7 +169,7 @@ private struct RectangularBackground: ViewModifier {
                 }
             )
             .if( foregroundColor != nil ) { view in view.foregroundStyle(foregroundColor!)}
-            .universalStyledBackgrond(style)
+            .universalStyledBackgrond(style, reversed: reverseStyle)
             .if(stroke) { view in
                 view
                     .overlay(
@@ -199,7 +200,8 @@ public extension View {
                                cornerRadius: CGFloat = Constants.UIDefaultCornerRadius,
                                corners: UIRectCorner = .allCorners,
                                texture: Bool = false,
-                               shadow: Bool = false) -> some View {
+                               shadow: Bool = false,
+                               reverseStyle: Bool = false) -> some View {
         
         modifier(RectangularBackground(style: style,
                                        padding: padding,
@@ -209,7 +211,8 @@ public extension View {
                                        stroke: stroke,
                                        strokeWidth: strokeWidth,
                                        texture: texture,
-                                       shadow: shadow))
+                                       shadow: shadow,
+                                      reverseStyle: reverseStyle))
     }
 }
 
@@ -346,16 +349,17 @@ private struct UniversalStyledBackground: ViewModifier {
     let style: UniversalStyle
     let color: Color?
     let foregrond: Bool
+    let reversed: Bool
     
     func body(content: Content) -> some View {
         if !foregrond {
             content
                 .if( style == .transparent ) { view in view.background( .ultraThinMaterial ) }
-                .if( style != .transparent ) { view in view.background( color ?? Colors.getColor(from: style, in: colorScheme) ) }
+                .if( style != .transparent ) { view in view.background( color ?? Colors.getColor(from: style, in: colorScheme, reversed: reversed) ) }
         } else {
             content
                 .if( style == .transparent ) { view in view.foregroundStyle( .ultraThinMaterial ) }
-                .if( style != .transparent ) { view in view.foregroundStyle( color ?? Colors.getColor(from: style, in: colorScheme) ) }
+                .if( style != .transparent ) { view in view.foregroundStyle( color ?? Colors.getColor(from: style, in: colorScheme, reversed: reversed) ) }
         }
     }
 }
@@ -375,7 +379,8 @@ public extension View {
     ///universalStyledBackground sets the background of a view to the correct color depending on the specified UniversalStyle and the system ColorScheme. It can also take a custom color to apply to the background. You can also to use these colors on the foreground of the view. When the colorScheme changes, this viewModifier automatically updates the style with the correct color. This modifier should be used instead of universalBackgroundColor or universalForegroundColor
     func universalStyledBackgrond( _ style: UniversalStyle,
                                    color: Color? = nil,
-                                   onForeground: Bool = false ) -> some View {
-        modifier( UniversalStyledBackground(style: style, color: color, foregrond: onForeground) )
+                                   onForeground: Bool = false,
+                                   reversed: Bool = false) -> some View {
+        modifier( UniversalStyledBackground(style: style, color: color, foregrond: onForeground, reversed: reversed) )
     }
 }

@@ -75,7 +75,11 @@ public struct LargeTextButton: View {
     let arrowWidth: CGFloat
     let arrow: Bool
     
+    let font: UniversalFont
+    let fontSize: Double
+    
     let style: UniversalStyle
+    let reverseStyle: Bool
     let color: Color?
     let width: CGFloat
     
@@ -88,7 +92,10 @@ public struct LargeTextButton: View {
                  arrow: Bool = true,
                  arrowDirection: ArrowDirection = .down,
                  arrowWidth: CGFloat = 4,
+                 font: UniversalFont = Constants.titleFont,
+                 fontSize: Double = Constants.UIHeaderTextSize,
                  style: UniversalStyle = .accent,
+                 reverseStyle: Bool = false,
                  color: Color? = nil,
                  width: CGFloat = 100,
                  action: @escaping () -> Void
@@ -103,7 +110,11 @@ public struct LargeTextButton: View {
         self.arrowWidth = arrowWidth
         self.arrowDirection = arrowDirection
         
+        self.font = font
+        self.fontSize = fontSize
+        
         self.style = style
+        self.reverseStyle = reverseStyle
         self.color = color
         self.width = width
         
@@ -113,12 +124,11 @@ public struct LargeTextButton: View {
     
     @ViewBuilder
     private func makeShape(_ contentMode: ContentMode) -> some View {
-        
         Rectangle()
             .aspectRatio(1 / aspectRatio, contentMode: contentMode)
             .frame(width: width)
             .cornerRadius(Constants.UIDefaultCornerRadius)
-            .universalStyledBackgrond(style, color: color, onForeground: true)
+            .universalStyledBackgrond(style, color: color, onForeground: true, reversed: reverseStyle)
     }
     
     @ViewBuilder
@@ -195,12 +205,12 @@ public struct LargeTextButton: View {
                     if !text.isEmpty {
                         RotatedLayout(at: 0, scale: 0.7) {
                             UniversalText(transformedText,
-                                          size: Constants.UIHeaderTextSize + 10,
-                                          font: Constants.mainFont,
+                                          size: fontSize,
+                                          font: font,
                                           case: .uppercase,
                                           scale: true,
                                           textAlignment: .center,
-                                          lineSpacing: -25)
+                                          lineSpacing: -0.5 * fontSize)
                             .scaleEffect(CGSize(width: 0.7, height: 0.7))
                             .rotationEffect(.degrees(-angle))
                             .allowsHitTesting(false)
@@ -274,7 +284,7 @@ public struct LargeRoundedButton: View {
         self.color = color
         self.style = style
         
-//        self.contentLabel = labelBuilder
+    
     }
     
     public var body: some View {

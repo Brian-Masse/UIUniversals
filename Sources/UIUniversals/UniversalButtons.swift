@@ -67,6 +67,7 @@ public struct LargeTextButton: View {
     
     let text: String
     let angle: Double
+    let cornerRadius: Double
 
     let aspectRatio: Double
     let verticalTextAlignment: Alignment
@@ -88,6 +89,7 @@ public struct LargeTextButton: View {
     public init( _ text: String,
                  at angle: Double,
                  aspectRatio: Double = 2,
+                 cornerRadius: Double = Constants.UIDefaultCornerRadius,
                  verticalTextAlignment: Alignment = .bottom,
                  arrow: Bool = true,
                  arrowDirection: ArrowDirection = .down,
@@ -103,6 +105,7 @@ public struct LargeTextButton: View {
         
         self.text = text
         self.angle = angle
+        self.cornerRadius = cornerRadius
         self.aspectRatio = aspectRatio
         self.verticalTextAlignment = verticalTextAlignment
         
@@ -119,7 +122,6 @@ public struct LargeTextButton: View {
         self.width = width
         
         self.action = action
-    
     }
     
     @ViewBuilder
@@ -127,7 +129,7 @@ public struct LargeTextButton: View {
         Rectangle()
             .aspectRatio(1 / aspectRatio, contentMode: contentMode)
             .frame(width: width)
-            .cornerRadius(Constants.UIDefaultCornerRadius)
+            .cornerRadius(cornerRadius)
             .universalStyledBackgrond(style, color: color, onForeground: true, reversed: reverseStyle)
     }
     

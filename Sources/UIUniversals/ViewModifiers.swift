@@ -305,6 +305,11 @@ public extension View {
     func hideKeyboard() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
+    
+    func tapHidesKeyboard() -> some View  {
+        onTapGesture { self.hideKeyboard() }
+    }
+    
     #endif
 
     ///The if extension on View creates a conditional modifier, that applies a unique style when a certain condition is met. It automatically refreshes when the condition changes.

@@ -25,7 +25,7 @@ public enum UniversalStyle: String, Identifiable {
 }
 
 @available(iOS 13.0, *)
-extension Color {
+public extension Color {
     ///initialize a color with rgb measured from 0 to 255
     init( _ red: Double, _ green: Double, _ blue: Double ) {
         self.init(red: red / 255, green: green / 255, blue: blue / 255)

@@ -24,6 +24,14 @@ public enum UniversalStyle: String, Identifiable {
     }
 }
 
+@available(iOS 13.0, *)
+extension Color {
+    ///initialize a color with rgb measured from 0 to 255
+    init( _ red: Double, _ green: Double, _ blue: Double ) {
+        self.init(red: red / 255, green: green / 255, blue: blue / 255)
+    }
+}
+
 //MARK: Colors
 ///The colors class is a container for default and provided colors. Base Colors and the accent Colors can be modified via the `setColors` method. The class can be extended to house additional default Colors for an application.
 @available(iOS 13.0, *)
@@ -97,40 +105,21 @@ public class Colors {
     }
     
     ///This is a publicly accessible function to change the default accent, base, and secondary colors. Each arg is a convenienceColor, which is an abstracted representation of a SwiftUI Color, but allows you to quickly initialize them with red, green, and blue channels in base 255. If an argument is left as nil, it does not change that color.
-    public static func setColors( baseLight:ConvenienceColor?=nil,
-                                  secondaryLight:ConvenienceColor?=nil,
-                                  baseDark:ConvenienceColor?=nil,
-                                  secondaryDark:ConvenienceColor?=nil,
-                                  lightAccent:ConvenienceColor?=nil,
-                                  darkAccent:ConvenienceColor?=nil ) {
+    public static func setColors( baseLight:Color?=nil,
+                                  secondaryLight:Color?=nil,
+                                  baseDark:Color?=nil,
+                                  secondaryDark:Color?=nil,
+                                  lightAccent:Color?=nil,
+                                  darkAccent:Color?=nil ) {
         
-        Colors.baseLight =      baseLight?.convert() ?? Colors.baseLight
-        Colors.secondaryLight = secondaryLight?.convert() ?? Colors.secondaryLight
-        Colors.baseDark =       baseDark?.convert() ?? Colors.baseDark
-        Colors.secondaryDark =  secondaryDark?.convert() ?? Colors.secondaryDark
+        Colors.baseLight =      baseLight ?? Colors.baseLight
+        Colors.secondaryLight = secondaryLight ?? Colors.secondaryLight
+        Colors.baseDark =       baseDark ?? Colors.baseDark
+        Colors.secondaryDark =  secondaryDark ?? Colors.secondaryDark
         
-        Colors.lightAccent =    lightAccent?.convert() ?? Colors.lightAccent
-        Colors.darkAccent =     darkAccent?.convert() ?? Colors.darkAccent
+        Colors.lightAccent =    lightAccent ?? Colors.lightAccent
+        Colors.darkAccent =     darkAccent ?? Colors.darkAccent
         
-    }
-    
-//    This is in base 255, and is used for easily passing colors into the setColors function
-    public struct ConvenienceColor {
-        let red: CGFloat
-        let blue: CGFloat
-        let green: CGFloat
-        
-        public init( _ red: CGFloat, _ green: CGFloat, _ blue: CGFloat) {
-            self.red = red
-            self.green = green
-            self.blue = blue
-        }
-        
-        public func convert() -> Color {
-            Colors.makeColor(self.red,
-                             self.green,
-                             self.blue)
-        }
     }
 }
 

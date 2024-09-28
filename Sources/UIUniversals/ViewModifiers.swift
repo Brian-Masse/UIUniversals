@@ -350,6 +350,7 @@ private struct UniversalBackgroundColor: ViewModifier {
 @available(iOS 15.0, *)
 private struct UniversalStyledBackground: ViewModifier {
     @Environment(\.colorScheme) var colorScheme
+    @ObservedObject private var colors = Colors.shared
     
     let style: UniversalStyle
     let color: Color?

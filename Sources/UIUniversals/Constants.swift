@@ -35,35 +35,35 @@ public extension Color {
 //MARK: Colors
 ///The colors class is a container for default and provided colors. Base Colors and the accent Colors can be modified via the `setColors` method. The class can be extended to house additional default Colors for an application.
 @available(iOS 13.0, *)
-public class Colors {
+public class Colors: ObservableObject {
     
     ///The getAccent function takes in an iOS ColorScheme and returns the corresponding accent color.
     public static func getAccent(from colorScheme: ColorScheme, reversed: Bool = false) -> Color {
         switch colorScheme {
-        case .light: return !reversed ? Colors.lightAccent : Colors.darkAccent
-        case .dark: return !reversed ? Colors.darkAccent : Colors.lightAccent
+        case .light: return !reversed ? Colors.shared.lightAccent : Colors.shared.darkAccent
+        case .dark: return !reversed ? Colors.shared.darkAccent : Colors.shared.lightAccent
         @unknown default:
-            return Colors.lightAccent
+            return Colors.shared.lightAccent
         }
     }
     
     ///The getBase function takes in an iOS ColorScheme and returns the corresponding base color.
     public static func getBase(from colorScheme: ColorScheme, reversed: Bool = false) -> Color {
         switch colorScheme {
-        case .light: return !reversed ? Colors.baseLight : Colors.baseDark
-        case .dark: return !reversed ? Colors.baseDark : Colors.baseLight
+        case .light: return !reversed ? Colors.shared.baseLight : Colors.shared.baseDark
+        case .dark: return !reversed ? Colors.shared.baseDark : Colors.shared.baseLight
         @unknown default:
-            return Colors.baseDark
+            return Colors.shared.baseDark
         }
     }
     
     ///The getSecondaryBase function takes in an iOS ColorScheme and returns the corresponding secondary color.
     public static func getSecondaryBase(from colorScheme: ColorScheme, reversed: Bool = false) -> Color {
         switch colorScheme {
-        case .light: return !reversed ? Colors.secondaryLight : Colors.secondaryDark
-        case .dark: return !reversed ? Colors.secondaryDark : Colors.secondaryLight
+        case .light: return !reversed ? Colors.shared.secondaryLight : Colors.shared.secondaryDark
+        case .dark: return !reversed ? Colors.shared.secondaryDark : Colors.shared.secondaryLight
         @unknown default:
-            return Colors.secondaryDark
+            return Colors.shared.secondaryDark
         }
     }
     
@@ -73,36 +73,39 @@ public class Colors {
         case .primary: return getBase(from: colorScheme, reversed: reversed)
         case .secondary: return getSecondaryBase(from: colorScheme, reversed: reversed)
         case .accent: return getAccent(from: colorScheme, reversed: reversed)
-        default: return Colors.lightAccent
+        default: return Colors.shared.lightAccent
         }
     }
     
+    public static let shared = Colors()
+    
     ///These are your apps default base colors. These show up in backgrounds of buttons, text, views. They should generally be neutral and unintrusive colors. You can and should set individual values for light and dark mode.
-    public static var baseLight = makeColor( 245, 234, 208 )
+    @Published public var baseLight = Color( 245, 234, 208 )
     ///These are your apps default base colors. These show up in backgrounds of buttons, text, views. They should generally be neutral and unintrusive colors. You can and should set individual values for light and dark mode.
-    public static var baseDark = makeColor( 0,0,0 )
+    @Published public var baseDark = Color( 0,0,0 )
     
     ///These are your apps default secondary base colors. These show up on top of the base colors but are still intended for backgrounds of views. They should generally be neutral and unintrusive colors. You can and should set individual values for light and dark mode.
-    public static var secondaryLight = makeColor(220, 207, 188)
+    @Published public var secondaryLight = Color(220, 207, 188)
     ///These are your apps default secondary base colors. These show up on top of the base colors but are still intended for backgrounds of views. They should generally be neutral and unintrusive colors. You can and should set individual values for light and dark mode.
-    public static var secondaryDark = Color(red: 0.1, green: 0.1, blue: 0.1).opacity(0.9)
+    @Published public var secondaryDark = Color(red: 0.1, green: 0.1, blue: 0.1).opacity(0.9)
     
     ///These are your apps accent colors. These show up on certain styled buttons, when typing in a TextField, or when highlighting content. You can set individual values for light and dark mode.
-    public static var lightAccent = makeColor( 0, 87, 66)
+    @Published public var lightAccent = Color( 0, 87, 66)
     ///These are your apps accent colors. These show up on certain styled buttons, when typing in a TextField, or when highlighting content. You can set individual values for light and dark mode.
-    public static var darkAccent = makeColor( 0, 87, 66)
+    @Published public var darkAccent = Color( 0, 87, 66)
     
-    public static let yellow = makeColor(234, 169, 40)
-    public static let pink = makeColor(198, 62, 120)
-    public static let purple = makeColor(106, 38, 153)
-    public static let grape = makeColor(70, 42, 171)
-    public static let blue = makeColor(69, 121, 251)
-    public static let red = makeColor(236, 81, 46)
+    public static var defaultLightAccent = Color( 0, 87, 66)
+    public static var defaultDarkAccent = Color( 0, 87, 66)
     
-    ///the makeColor function takes a red, green, and blue argument and returns a SwiftUI Color. All values are from 0 to 255. This function is entirely for convenience and to avoid using the built in rgb initializer on Color.
-    public static func makeColor( _ r: CGFloat, _ g: CGFloat, _ b: CGFloat ) -> Color {
-        Color(red: r / 255, green: g / 255, blue: b / 255)
-    }
+    public static var defaultSecondaryLight = Color(220, 207, 188)
+    public static var defaultSecondaryDark = Color(red: 0.1, green: 0.1, blue: 0.1).opacity(0.9)
+    
+    public static let yellow = Color(234, 169, 40)
+    public static let pink = Color(198, 62, 120)
+    public static let purple = Color(106, 38, 153)
+    public static let grape = Color(70, 42, 171)
+    public static let blue = Color(69, 121, 251)
+    public static let red = Color(236, 81, 46)
     
     ///This is a publicly accessible function to change the default accent, base, and secondary colors. Each arg is a convenienceColor, which is an abstracted representation of a SwiftUI Color, but allows you to quickly initialize them with red, green, and blue channels in base 255. If an argument is left as nil, it does not change that color.
     public static func setColors( baseLight:Color?=nil,
@@ -110,15 +113,33 @@ public class Colors {
                                   baseDark:Color?=nil,
                                   secondaryDark:Color?=nil,
                                   lightAccent:Color?=nil,
-                                  darkAccent:Color?=nil ) {
+                                  darkAccent:Color?=nil,
+                                  defaultLightAccent: Color?=nil,
+                                  defaultDarkAccent: Color?=nil,
+                                  defaultSecondaryLight: Color?=nil,
+                                  defaultSecondaryDark: Color?=nil,
+                                  matchDefaults: Bool = false) {
         
-        Colors.baseLight =      baseLight ?? Colors.baseLight
-        Colors.secondaryLight = secondaryLight ?? Colors.secondaryLight
-        Colors.baseDark =       baseDark ?? Colors.baseDark
-        Colors.secondaryDark =  secondaryDark ?? Colors.secondaryDark
+        Colors.shared.baseLight =      baseLight ?? Colors.shared.baseLight
+        Colors.shared.secondaryLight = secondaryLight ?? Colors.shared.secondaryLight
+        Colors.shared.baseDark =       baseDark ?? Colors.shared.baseDark
+        Colors.shared.secondaryDark =  secondaryDark ?? Colors.shared.secondaryDark
         
-        Colors.lightAccent =    lightAccent ?? Colors.lightAccent
-        Colors.darkAccent =     darkAccent ?? Colors.darkAccent
+        Colors.shared.lightAccent =    lightAccent ?? Colors.shared.lightAccent
+        Colors.shared.darkAccent =     darkAccent ?? Colors.shared.darkAccent
+        
+        Colors.defaultLightAccent = defaultLightAccent ?? Colors.defaultLightAccent
+        Colors.defaultDarkAccent = defaultDarkAccent ?? Colors.defaultDarkAccent
+        Colors.defaultSecondaryLight = defaultSecondaryLight ?? Colors.defaultSecondaryLight
+        Colors.defaultSecondaryDark = defaultSecondaryDark ?? Colors.defaultSecondaryDark
+        
+        if matchDefaults {
+            Colors.defaultSecondaryLight = Colors.shared.secondaryLight
+            Colors.defaultSecondaryDark = Colors.shared.secondaryDark
+            
+            Colors.defaultLightAccent = Colors.shared.lightAccent
+            Colors.defaultDarkAccent = Colors.shared.darkAccent
+        }
         
     }
 }

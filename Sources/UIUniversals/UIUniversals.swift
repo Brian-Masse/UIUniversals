@@ -17,6 +17,7 @@ public struct UniversalText: View {
     let fixed: Bool
     let scale: Bool
     
+    let lineLimit: Int
     let minimumScaleFactor: CGFloat
     let alignment: TextAlignment
     let lineSpacing: CGFloat
@@ -29,6 +30,7 @@ public struct UniversalText: View {
                 wrap: Bool = true,
                 fixed: Bool = false,
                 scale: Bool = false,
+                lineLimit: Int = 30,
                 minimumScaleFactor: CGFloat = 0.1,
                 textAlignment: TextAlignment = .leading,
                 lineSpacing: CGFloat = 0.5,
@@ -43,6 +45,7 @@ public struct UniversalText: View {
         self.fixed = fixed
         self.scale = scale
         
+        self.lineLimit = lineLimit
         self.minimumScaleFactor = minimumScaleFactor
         self.alignment = textAlignment
         self.lineSpacing = lineSpacing
@@ -54,7 +57,7 @@ public struct UniversalText: View {
         Text(text)
             .lineSpacing(lineSpacing)
             .minimumScaleFactor(scale ? self.minimumScaleFactor : 1)
-            .lineLimit(wrap ? 30 : 1)
+            .lineLimit(wrap ? lineLimit : 1)
             .multilineTextAlignment(alignment)
             .font(Font.custom(font, size: size))
             .if( textCase != nil ) { view in view.textCase(textCase) }

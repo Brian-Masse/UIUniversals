@@ -54,7 +54,7 @@ public struct UniversalText: View {
     
     @ViewBuilder
     private func makeText(_ text: String) -> some View {
-        Text(text)
+        Text(LocalizedStringKey(text))
             .lineSpacing(lineSpacing)
             .minimumScaleFactor(scale ? self.minimumScaleFactor : 1)
             .lineLimit(wrap ? lineLimit : 1)
@@ -82,7 +82,7 @@ public struct UniversalText: View {
             
             VStack(alignment: translateTextAlignment(), spacing: 0) {
                 ForEach(0..<texts.count, id: \.self) { i in
-                    makeText(texts[i])
+                    makeText( texts[i] )
                         .offset(y: CGFloat( i ) * lineSpacing )
                 }
             }

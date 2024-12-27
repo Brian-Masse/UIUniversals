@@ -13,8 +13,12 @@ import SwiftUI
 public struct UniversalButton<C: View>: View {
     
     let label: C
-    let action: () -> Void
+    let action: (() -> Void)?
+    let asyncAction: (() async -> Void)?
+    let isAsync: Bool
     let animate: Bool
+    
+    @State private var performingTask: Bool = false
     
     private struct OpacityButtonStyle: ButtonStyle {
         func makeBody(configuration: Configuration) -> some View {
@@ -32,16 +36,40 @@ public struct UniversalButton<C: View>: View {
         }
     }
     
-    public init( shouldAnimate: Bool = true, labelBuilder: () -> C, action: @escaping () -> Void) {
+    public init( shouldAnimate: Bool = true,
+                 labelBuilder: () -> C,
+                 action: @escaping () -> Void) {
         self.label = labelBuilder()
         self.action = action
+        self.asyncAction = nil
         self.animate = shouldAnimate
+        self.isAsync = false
+    }
+    
+    public init( shouldAnimate: Bool = true,
+                 labelBuilder: () -> C,
+                 action: @escaping () async -> Void) {
+        self.label = labelBuilder()
+        self.action = nil
+        self.asyncAction = action
+        self.animate = shouldAnimate
+        self.isAsync = true
     }
     
     public var body: some View {
         Button { withAnimation {
-            action()
+            if isAsync {
+                performingTask = true
+                Task {
+                    await asyncAction!()
+                    performingTask = false
+                }
+            } else {
+                action!()
+            }
         } } label: { label }
+        
+            .disabled(performingTask)
             .if( animate ) { view in view.buttonStyle( OpacityButtonStyle() ) }
             .if( !animate ) { view in view.buttonStyle( NoTapAnimationStyle() ) }
     }

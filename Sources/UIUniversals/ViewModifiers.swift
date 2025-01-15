@@ -15,6 +15,8 @@ let inDev: Bool = false
 private struct UniversalBackground: ViewModifier {
     @Environment(\.colorScheme) var colorScheme
 
+    
+    
     let style: UniversalStyle
     let padding: CGFloat
     let color: Color?
@@ -35,7 +37,7 @@ private struct UniversalBackground: ViewModifier {
                     .ignoresSafeArea(.container, edges: .bottom)
             }
             .frame(width: geo.size.width, height: geo.size.height)
-            .if(color == nil) { view in view.background(Colors.getColor(from: style, in: colorScheme))  }
+            .if(color == nil) { view in view.universalStyledBackgrond(.primary)    }
             .if(color != nil) { view in view.background(color!) }
         }
     }

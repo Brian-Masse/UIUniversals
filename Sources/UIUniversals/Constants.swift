@@ -97,11 +97,14 @@ public class Colors: ObservableObject {
     public static var defaultLightAccent = Color( 0, 87, 66)
     public static var defaultDarkAccent = Color( 0, 87, 66)
     
+    public static var defaultPrimaryLight = Color(255, 255, 255)
+    public static var defaultPrimaryDark = Color(0, 0, 0)
+    
     public static var defaultSecondaryLight = Color(220, 207, 188)
     public static var defaultSecondaryDark = Color(red: 0.1, green: 0.1, blue: 0.1).opacity(0.9)
     
     public static let yellow = Color(234, 169, 40)
-    public static let pink = Color(198, 62, 120)
+    public static let pink = Color(255, 107, 149)
     public static let purple = Color(106, 38, 153)
     public static let grape = Color(70, 42, 171)
     public static let blue = Color(69, 121, 251)
@@ -128,12 +131,15 @@ public class Colors: ObservableObject {
         Colors.shared.lightAccent =    lightAccent ?? Colors.shared.lightAccent
         Colors.shared.darkAccent =     darkAccent ?? Colors.shared.darkAccent
         
-        Colors.defaultLightAccent = defaultLightAccent ?? Colors.defaultLightAccent
-        Colors.defaultDarkAccent = defaultDarkAccent ?? Colors.defaultDarkAccent
-        Colors.defaultSecondaryLight = defaultSecondaryLight ?? Colors.defaultSecondaryLight
-        Colors.defaultSecondaryDark = defaultSecondaryDark ?? Colors.defaultSecondaryDark
+//        Colors.defaultLightAccent = defaultLightAccent ?? Colors.defaultLightAccent
+//        Colors.defaultDarkAccent = defaultDarkAccent ?? Colors.defaultDarkAccent
+//        Colors.defaultSecondaryLight = defaultSecondaryLight ?? Colors.defaultSecondaryLight
+//        Colors.defaultSecondaryDark = defaultSecondaryDark ?? Colors.defaultSecondaryDark
         
         if matchDefaults {
+            Colors.defaultPrimaryLight = Colors.shared.baseLight
+            Colors.defaultPrimaryDark = Colors.shared.baseDark
+            
             Colors.defaultSecondaryLight = Colors.shared.secondaryLight
             Colors.defaultSecondaryDark = Colors.shared.secondaryDark
             
